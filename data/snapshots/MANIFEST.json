@@ -1,0 +1,165 @@
+{
+  "generated_at": "2026-08-15T15:31:03+00:00",
+  "tickers": {
+    "AAPL": {
+      "downloaded_at": "2026-08-15T15:30:43+00:00",
+      "first_date": "2018-01-02",
+      "last_date": "2026-08-14",
+      "requested_end": "2026-08-15",
+      "requested_start": "2018-01-01",
+      "rows": 2166,
+      "source": "yfinance",
+      "yfinance_version": "1.6.0"
+    },
+    "AMZN": {
+      "downloaded_at": "2026-08-15T15:30:47+00:00",
+      "first_date": "2018-01-02",
+      "last_date": "2026-08-14",
+      "requested_end": "2026-08-15",
+      "requested_start": "2018-01-01",
+      "rows": 2166,
+      "source": "yfinance",
+      "yfinance_version": "1.6.0"
+    },
+    "BAC": {
+      "downloaded_at": "2026-08-15T15:30:51+00:00",
+      "first_date": "2018-01-02",
+      "last_date": "2026-08-14",
+      "requested_end": "2026-08-15",
+      "requested_start": "2018-01-01",
+      "rows": 2166,
+      "source": "yfinance",
+      "yfinance_version": "1.6.0"
+    },
+    "CVX": {
+      "downloaded_at": "2026-08-15T15:30:54+00:00",
+      "first_date": "2018-01-02",
+      "last_date": "2026-08-14",
+      "requested_end": "2026-08-15",
+      "requested_start": "2018-01-01",
+      "rows": 2166,
+      "source": "yfinance",
+      "yfinance_version": "1.6.0"
+    },
+    "GOOGL": {
+      "downloaded_at": "2026-08-15T15:30:48+00:00",
+      "first_date": "2018-01-02",
+      "last_date": "2026-08-14",
+      "requested_end": "2026-08-15",
+      "requested_start": "2018-01-01",
+      "rows": 2166,
+      "source": "yfinance",
+      "yfinance_version": "1.6.0"
+    },
+    "JNJ": {
+      "downloaded_at": "2026-08-15T15:30:55+00:00",
+      "first_date": "2018-01-02",
+      "last_date": "2026-08-14",
+      "requested_end": "2026-08-15",
+      "requested_start": "2018-01-01",
+      "rows": 2166,
+      "source": "yfinance",
+      "yfinance_version": "1.6.0"
+    },
+    "JPM": {
+      "downloaded_at": "2026-08-15T15:30:50+00:00",
+      "first_date": "2018-01-02",
+      "last_date": "2026-08-14",
+      "requested_end": "2026-08-15",
+      "requested_start": "2018-01-01",
+      "rows": 2166,
+      "source": "yfinance",
+      "yfinance_version": "1.6.0"
+    },
+    "KO": {
+      "downloaded_at": "2026-08-15T15:31:00+00:00",
+      "first_date": "2018-01-02",
+      "last_date": "2026-08-14",
+      "requested_end": "2026-08-15",
+      "requested_start": "2018-01-01",
+      "rows": 2166,
+      "source": "yfinance",
+      "yfinance_version": "1.6.0"
+    },
+    "MSFT": {
+      "downloaded_at": "2026-08-15T15:30:44+00:00",
+      "first_date": "2018-01-02",
+      "last_date": "2026-08-14",
+      "requested_end": "2026-08-15",
+      "requested_start": "2018-01-01",
+      "rows": 2166,
+      "source": "yfinance",
+      "yfinance_version": "1.6.0"
+    },
+    "NVDA": {
+      "downloaded_at": "2026-08-15T15:30:46+00:00",
+      "first_date": "2018-01-02",
+      "last_date": "2026-08-14",
+      "requested_end": "2026-08-15",
+      "requested_start": "2018-01-01",
+      "rows": 2166,
+      "source": "yfinance",
+      "yfinance_version": "1.6.0"
+    },
+    "PFE": {
+      "downloaded_at": "2026-08-15T15:30:56+00:00",
+      "first_date": "2018-01-02",
+      "last_date": "2026-08-14",
+      "requested_end": "2026-08-15",
+      "requested_start": "2018-01-01",
+      "rows": 2166,
+      "source": "yfinance",
+      "yfinance_version": "1.6.0"
+    },
+    "PG": {
+      "downloaded_at": "2026-08-15T15:30:59+00:00",
+      "first_date": "2018-01-02",
+      "last_date": "2026-08-14",
+      "requested_end": "2026-08-15",
+      "requested_start": "2018-01-01",
+      "rows": 2166,
+      "source": "yfinance",
+      "yfinance_version": "1.6.0"
+    },
+    "SPY": {
+      "downloaded_at": "2026-08-15T15:31:03+00:00",
+      "first_date": "2018-01-02",
+      "last_date": "2026-08-14",
+      "requested_end": "2026-08-15",
+      "requested_start": "2018-01-01",
+      "rows": 2166,
+      "source": "yfinance",
+      "yfinance_version": "1.6.0"
+    },
+    "UNH": {
+      "downloaded_at": "2026-08-15T15:30:58+00:00",
+      "first_date": "2018-01-02",
+      "last_date": "2026-08-14",
+      "requested_end": "2026-08-15",
+      "requested_start": "2018-01-01",
+      "rows": 2166,
+      "source": "yfinance",
+      "yfinance_version": "1.6.0"
+    },
+    "WMT": {
+      "downloaded_at": "2026-08-15T15:31:02+00:00",
+      "first_date": "2018-01-02",
+      "last_date": "2026-08-14",
+      "requested_end": "2026-08-15",
+      "requested_start": "2018-01-01",
+      "rows": 2166,
+      "source": "yfinance",
+      "yfinance_version": "1.6.0"
+    },
+    "XOM": {
+      "downloaded_at": "2026-08-15T15:30:52+00:00",
+      "first_date": "2018-01-02",
+      "last_date": "2026-08-14",
+      "requested_end": "2026-08-15",
+      "requested_start": "2018-01-01",
+      "rows": 2166,
+      "source": "yfinance",
+      "yfinance_version": "1.6.0"
+    }
+  }
+}
