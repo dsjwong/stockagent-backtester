@@ -1,0 +1,15 @@
+# Decisions log
+
+Recorded decisions, with the reason, so later milestones do not re-litigate them.
+
+| # | Date | Decision | Why / notes |
+|---|------|----------|-------------|
+| 1 | 2026-08-15 | **Market: US large-caps** (not HK blue chips) | Cleanest free daily data (yfinance), no lot-size quirks, interview audience knows the names. |
+| 2 | 2026-08-15 | **Universe: 15 fixed names** (AAPL MSFT NVDA AMZN GOOGL JPM BAC XOM CVX JNJ PFE UNH PG KO WMT) + SPY as reference only; start 2018-01-01 | Spans sectors; ~2,166 daily bars each; covers 2020 crash, 2021 bull, 2022 drawdown. **Chosen with hindsight -> survivorship bias**; documented in `sab/data/universe.py` and to be restated in every results write-up. Benchmark for results is equal-weight buy-and-hold of the 15, not SPY. |
+| 3 | 2026-08-15 | **Prices: yfinance `auto_adjust=False`; keep both `Close` and `Adj Close`.** Strategies and returns use **Adj Close** (split + dividend adjusted, total-return proxy). Fills use `Open` scaled by the same adjustment factor `Adj Close / Close` of that bar (M2 detail). | Adjusted series avoids fake -50% "returns" on split days and credits dividends to buy-and-hold, which is the fair comparator. Raw Close kept so the adjustment can be audited. Snapshot dates recorded in `data/snapshots/MANIFEST.json`; yfinance back-adjusts, so re-downloading later changes historical Adj Close values slightly -- always run from the committed snapshot. |
+| 4 | 2026-08-15 | **Stooq fallback is best-effort.** | As of 2026-08 stooq's CSV endpoint sits behind a JS proof-of-work challenge; the fetcher detects that and fails loudly rather than silently returning HTML. All 16 symbols came from yfinance 1.6.0. Stooq is split- but not dividend-adjusted, so a stooq-sourced snapshot sets `Adj Close = Close` and records `source="stooq"`. |
+| 5 | 2026-08-15 | **Fill rule (M2): orders decided on bar t fill at bar t+1 OPEN.** No same-bar fills. Market orders only, always fully filled (large-caps, small notional). | Same-bar close fills are the classic lookahead bug. Next-open is the simplest defensible rule; the M2 test suite must show that perturbing bars > t changes nothing decided at t. |
+| 6 | 2026-08-15 | **Costs (M2): 10 bps commission + 5 bps slippage per side, applied to fill notional. Report every result with AND without costs.** | Round numbers, mildly pessimistic for US large-caps at retail; the with/without delta is itself a finding (esp. for chatty LLM agents). |
+| 7 | 2026-08-15 | **Loader is offline-only.** `sab.data.loader` never imports yfinance/requests (tested). Only `sab.data.download` touches the network. | Reproducibility + the LLM-cost rule ("replay costs $0") extend naturally to "replay needs no network". |
+| 8 | 2026-08-15 | **Classical strategies rewritten in Python**, not a C++ port/binding. | Small logic; a binding is not worth the build friction. |
+| 9 | 2026-08-15 | Python 3.14 (`python3` on this Mac) works with all deps; `requires-python >= 3.12`. | yfinance 1.6.0, pandas 3.0.5, pyarrow 25.0.1, numpy 2.5.2 all installed clean wheels. |
