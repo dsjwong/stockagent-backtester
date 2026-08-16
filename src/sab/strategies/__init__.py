@@ -1,7 +1,5 @@
-"""Strategies (M3/M4 — not yet implemented).
+"""Strategies. Interface: `on_bar(ctx: Context) -> list[Order]` (see sab.engine.backtest).
 
-Common interface: given a point-in-time view of prices (up to the decision bar) and the
-current portfolio, return target weights / orders. Planned: buy-and-hold equal-weight
-(benchmark), mean reversion, trend following, weighted trend (Python re-implementations
-of the C++ project), and LLM agents ported from StockAgent with a (prompt -> decision) cache.
+M2: buy-and-hold benchmarks only. M3: mean reversion, trend following. M4: LLM agents
+with a (prompt -> decision) cache.
 """
