@@ -18,17 +18,25 @@ allowed to be "they don't".
   win rate, costs; `summary_table()` — **done (M2)**
 - `strategies/` — buy-and-hold benchmarks (EW-15 monthly rebalance, EW-15 hold, SPY reference) — done (M2);
   classical: mean reversion (20d z-score), trend following (SMA50>SMA200, two sizings), weighted trend
-  (1/3/6/12-month blend), 12-1 momentum top-5 — **done (M3)**; LLM agents with (prompt -> decision) cache — M4
+  (1/3/6/12-month blend), 12-1 momentum top-5 — **done (M3)**
+- `llm/` — LLM agent: audited prompt builder (real / anonymised modes), disk cache keyed on (provider, model, prompt,
+  temperature, seed) so replays cost $0, provider adapters (anthropic / openai / gemini / ollama, lazily imported) + three
+  deterministic mocks, tolerant JSON parsing with counted repairs, one retry then hold-on-failure, per-decision log,
+  consistency check — **done (M4a, offline)**; real-model runs — M4b
 
-**Status:** M3 done (classical strategies + first results table; 65 tests incl. the lookahead-perturbation
-harness run over every strategy, no-same-bar-fill, exact round-trip cost, cash >= 0 / exposure <= 1, determinism,
-synthetic behaviour checks). Next: M4 LLM agents. See `docs/decisions.md` (#10-#17 engine rules, #18-#21 strategy
-defaults / no-tuning / period handling / cost sweep), `reports/M3-results.md`, `reports/M2-benchmark.md`.
+**Status:** M4a done (LLM agent pipeline, fully offline: 102 tests incl. prompt no-future audit on real data at
+5 dates x 2 modes, the lookahead-perturbation harness on the LLM agent, `mock_ew` == EqualWeight exact, zero-call
+replay, parse/retry/fallback, cache round-trip). Next: M4b real-model runs (`scripts/run_llm.py --estimate-tokens`
+says ~$0.1-0.5 per model-year). See `docs/decisions.md` (#10-#17 engine rules, #18-#21 strategy defaults / no-tuning /
+period handling / cost sweep, #22-#26 LLM prompt / cache / parsing / cost budget), `reports/M3-results.md`.
 
 **Run:** `python3 -m venv .venv && .venv/bin/pip install -e . pytest` ·
 `.venv/bin/pytest -q` · classical results: `.venv/bin/python scripts/run_classical.py` (~1 min, offline; writes
 `reports/M3-results.md`, `reports/fig/equity_classical_full.png` + per-period figures, and every run's
 equity/weights/trades/config under `reports/runs/`) · M2 benchmark: `.venv/bin/python scripts/run_benchmark.py` ·
+LLM agent (mock, offline): `.venv/bin/python scripts/run_llm.py --provider mock --model mock_ew --mode anon --period 2022`;
+token/cost estimate: `.venv/bin/python scripts/run_llm.py --estimate-tokens --period 2021 --period 2022 --period full`;
+real models need `pip install -e '.[llm]'` + `ANTHROPIC_API_KEY` / `OPENAI_API_KEY` / `GEMINI_API_KEY` in `.env` ·
 refresh data with `.venv/bin/python -m sab.data.download [--force]` (snapshots are committed, so this is optional).
 
 **Headline (M3, with costs 10+5 bps/side, rf = 0, all runs entered 2019-01-02 with warmup history, universe picked with hindsight):**
