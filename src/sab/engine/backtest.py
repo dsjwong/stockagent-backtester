@@ -128,8 +128,10 @@ class BacktestResult:
             "broker_events": self.broker_events,
         }
 
-    def save(self, directory: str | Path) -> Path:
-        d = Path(directory) / self.name
+    def save(self, directory: str | Path, name: str | None = None) -> Path:
+        """Write equity/cash/turnover, weights, trades (parquet) + config.json under
+        directory/<name or self.name>. `name` lets callers pass a filesystem-safe slug."""
+        d = Path(directory) / (name or self.name)
         d.mkdir(parents=True, exist_ok=True)
         pd.DataFrame({"equity": self.equity, "cash": self.cash, "turnover": self.turnover}).to_parquet(d / "equity.parquet")
         self.weights.to_parquet(d / "weights.parquet")
@@ -212,6 +214,7 @@ def run_backtest(
         turnover=turnover,
         trades=trades,
         config={**config.to_dict(), "strategy": getattr(strategy, "name", type(strategy).__name__),
+                "params": dict(getattr(strategy, "params", {}) or {}),
                 "start": str(dates[0].date()), "end": str(dates[-1].date()), "n_bars": T,
                 "n_scaled_down": broker.n_scaled_down, "n_sell_capped": broker.n_sell_capped},
         broker_events=broker.events,
