@@ -1,0 +1,22 @@
+{
+  "name": "MeanRev(N=20,z<-1)",
+  "initial_cash": 1000000.0,
+  "rebalance": "weekly",
+  "warmup": 20,
+  "commission_bps": 10.0,
+  "slippage_bps": 5.0,
+  "strategy": "MeanRev(N=20,z<-1)",
+  "params": {
+    "lookback": 20,
+    "z_entry": -1.0,
+    "max_names": null,
+    "selection": "all with z < z_entry, equal-weight; cash otherwise",
+    "rebalance": "weekly"
+  },
+  "start": "2020-12-03",
+  "end": "2021-12-31",
+  "n_bars": 252,
+  "n_scaled_down": 10,
+  "n_sell_capped": 0,
+  "period_start": "2021-01-04"
+}

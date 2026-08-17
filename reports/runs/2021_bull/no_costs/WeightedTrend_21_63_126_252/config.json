@@ -1,0 +1,26 @@
+{
+  "name": "WeightedTrend(21/63/126/252)",
+  "initial_cash": 1000000.0,
+  "rebalance": "monthly",
+  "warmup": 252,
+  "commission_bps": 0.0,
+  "slippage_bps": 0.0,
+  "strategy": "WeightedTrend(21/63/126/252)",
+  "params": {
+    "horizons": [
+      21,
+      63,
+      126,
+      252
+    ],
+    "max_weight": 0.25,
+    "weighting": "blend of horizon returns, clipped at 0, normalised to 1 (cash if none > 0)",
+    "rebalance": "monthly"
+  },
+  "start": "2020-01-03",
+  "end": "2021-12-31",
+  "n_bars": 252,
+  "n_scaled_down": 2,
+  "n_sell_capped": 0,
+  "period_start": "2021-01-04"
+}

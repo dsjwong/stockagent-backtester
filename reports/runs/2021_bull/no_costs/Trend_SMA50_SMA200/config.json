@@ -1,0 +1,22 @@
+{
+  "name": "Trend(SMA50>SMA200)",
+  "initial_cash": 1000000.0,
+  "rebalance": "weekly",
+  "warmup": 200,
+  "commission_bps": 0.0,
+  "slippage_bps": 0.0,
+  "strategy": "Trend(SMA50>SMA200)",
+  "params": {
+    "fast": 50,
+    "slow": 200,
+    "sizing": "equal",
+    "selection": "equal-weight all with SMA_fast > SMA_slow; cash otherwise",
+    "rebalance": "weekly"
+  },
+  "start": "2020-03-19",
+  "end": "2021-12-31",
+  "n_bars": 252,
+  "n_scaled_down": 17,
+  "n_sell_capped": 0,
+  "period_start": "2021-01-04"
+}

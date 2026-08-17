@@ -1,0 +1,16 @@
+{
+  "name": "EW-rebal",
+  "initial_cash": 1000000.0,
+  "rebalance": "monthly",
+  "warmup": 0,
+  "commission_bps": 0.0,
+  "slippage_bps": 0.0,
+  "strategy": "EW-rebal",
+  "params": {},
+  "start": "2022-01-03",
+  "end": "2022-12-30",
+  "n_bars": 251,
+  "n_scaled_down": 4,
+  "n_sell_capped": 0,
+  "period_start": "2022-01-03"
+}

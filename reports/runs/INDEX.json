@@ -1,0 +1,1258 @@
+{
+ "full (2019-01 .. 2026-08)": {
+  "with costs (10+5 bps)": {
+   "MeanRev(N=20,z<-1)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 20,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "MeanRev(N=20,z<-1)",
+    "params": {
+     "lookback": 20,
+     "z_entry": -1.0,
+     "max_names": null,
+     "selection": "all with z < z_entry, equal-weight; cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2018-11-30",
+    "end": "2026-08-14",
+    "n_bars": 1915,
+    "n_scaled_down": 108,
+    "n_sell_capped": 0,
+    "period_start": "2019-01-02"
+   },
+   "Trend(SMA50>SMA200)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 200,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "Trend(SMA50>SMA200)",
+    "params": {
+     "fast": 50,
+     "slow": 200,
+     "sizing": "equal",
+     "selection": "equal-weight all with SMA_fast > SMA_slow; cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2018-03-16",
+    "end": "2026-08-14",
+    "n_bars": 1915,
+    "n_scaled_down": 122,
+    "n_sell_capped": 0,
+    "period_start": "2019-01-02"
+   },
+   "Trend(SMA50>SMA200), 1/N slots": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 200,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "Trend(SMA50>SMA200), 1/N slots",
+    "params": {
+     "fast": 50,
+     "slow": 200,
+     "sizing": "slots",
+     "selection": "1/N in each name with SMA_fast > SMA_slow, its slot in cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2018-03-16",
+    "end": "2026-08-14",
+    "n_bars": 1915,
+    "n_scaled_down": 6,
+    "n_sell_capped": 0,
+    "period_start": "2019-01-02"
+   },
+   "WeightedTrend(21/63/126/252)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 251,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "WeightedTrend(21/63/126/252)",
+    "params": {
+     "horizons": [
+      21,
+      63,
+      126,
+      252
+     ],
+     "max_weight": 0.25,
+     "weighting": "blend of horizon returns, clipped at 0, normalised to 1 (cash if none > 0)",
+     "rebalance": "monthly"
+    },
+    "start": "2018-01-02",
+    "end": "2026-08-14",
+    "n_bars": 1915,
+    "n_scaled_down": 37,
+    "n_sell_capped": 0,
+    "period_start": "2019-01-02"
+   },
+   "MomTop5(12-1m)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 251,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "MomTop5(12-1m)",
+    "params": {
+     "k": 5,
+     "lookback": 252,
+     "skip": 21,
+     "long_only_positive": false,
+     "rebalance": "monthly"
+    },
+    "start": "2018-01-02",
+    "end": "2026-08-14",
+    "n_bars": 1915,
+    "n_scaled_down": 38,
+    "n_sell_capped": 0,
+    "period_start": "2019-01-02"
+   },
+   "EW-rebal (monthly)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "EW-rebal",
+    "params": {},
+    "start": "2019-01-02",
+    "end": "2026-08-14",
+    "n_bars": 1915,
+    "n_scaled_down": 29,
+    "n_sell_capped": 0,
+    "period_start": "2019-01-02"
+   },
+   "EW-hold": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "EW-hold",
+    "params": {},
+    "start": "2019-01-02",
+    "end": "2026-08-14",
+    "n_bars": 1915,
+    "n_scaled_down": 0,
+    "n_sell_capped": 0,
+    "period_start": "2019-01-02"
+   },
+   "SPY (reference)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "SPY",
+    "params": {},
+    "start": "2019-01-02",
+    "end": "2026-08-14",
+    "n_bars": 1915,
+    "n_scaled_down": 0,
+    "n_sell_capped": 0,
+    "period_start": "2019-01-02"
+   }
+  },
+  "no costs": {
+   "MeanRev(N=20,z<-1)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 20,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "MeanRev(N=20,z<-1)",
+    "params": {
+     "lookback": 20,
+     "z_entry": -1.0,
+     "max_names": null,
+     "selection": "all with z < z_entry, equal-weight; cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2018-11-30",
+    "end": "2026-08-14",
+    "n_bars": 1915,
+    "n_scaled_down": 100,
+    "n_sell_capped": 0,
+    "period_start": "2019-01-02"
+   },
+   "Trend(SMA50>SMA200)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 200,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "Trend(SMA50>SMA200)",
+    "params": {
+     "fast": 50,
+     "slow": 200,
+     "sizing": "equal",
+     "selection": "equal-weight all with SMA_fast > SMA_slow; cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2018-03-16",
+    "end": "2026-08-14",
+    "n_bars": 1915,
+    "n_scaled_down": 166,
+    "n_sell_capped": 0,
+    "period_start": "2019-01-02"
+   },
+   "Trend(SMA50>SMA200), 1/N slots": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 200,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "Trend(SMA50>SMA200), 1/N slots",
+    "params": {
+     "fast": 50,
+     "slow": 200,
+     "sizing": "slots",
+     "selection": "1/N in each name with SMA_fast > SMA_slow, its slot in cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2018-03-16",
+    "end": "2026-08-14",
+    "n_bars": 1915,
+    "n_scaled_down": 9,
+    "n_sell_capped": 0,
+    "period_start": "2019-01-02"
+   },
+   "WeightedTrend(21/63/126/252)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 251,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "WeightedTrend(21/63/126/252)",
+    "params": {
+     "horizons": [
+      21,
+      63,
+      126,
+      252
+     ],
+     "max_weight": 0.25,
+     "weighting": "blend of horizon returns, clipped at 0, normalised to 1 (cash if none > 0)",
+     "rebalance": "monthly"
+    },
+    "start": "2018-01-02",
+    "end": "2026-08-14",
+    "n_bars": 1915,
+    "n_scaled_down": 41,
+    "n_sell_capped": 0,
+    "period_start": "2019-01-02"
+   },
+   "MomTop5(12-1m)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 251,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "MomTop5(12-1m)",
+    "params": {
+     "k": 5,
+     "lookback": 252,
+     "skip": 21,
+     "long_only_positive": false,
+     "rebalance": "monthly"
+    },
+    "start": "2018-01-02",
+    "end": "2026-08-14",
+    "n_bars": 1915,
+    "n_scaled_down": 42,
+    "n_sell_capped": 0,
+    "period_start": "2019-01-02"
+   },
+   "EW-rebal (monthly)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "EW-rebal",
+    "params": {},
+    "start": "2019-01-02",
+    "end": "2026-08-14",
+    "n_bars": 1915,
+    "n_scaled_down": 44,
+    "n_sell_capped": 0,
+    "period_start": "2019-01-02"
+   },
+   "EW-hold": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "EW-hold",
+    "params": {},
+    "start": "2019-01-02",
+    "end": "2026-08-14",
+    "n_bars": 1915,
+    "n_scaled_down": 0,
+    "n_sell_capped": 0,
+    "period_start": "2019-01-02"
+   },
+   "SPY (reference)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "SPY",
+    "params": {},
+    "start": "2019-01-02",
+    "end": "2026-08-14",
+    "n_bars": 1915,
+    "n_scaled_down": 0,
+    "n_sell_capped": 0,
+    "period_start": "2019-01-02"
+   }
+  }
+ },
+ "2021 (bull)": {
+  "with costs (10+5 bps)": {
+   "MeanRev(N=20,z<-1)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 20,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "MeanRev(N=20,z<-1)",
+    "params": {
+     "lookback": 20,
+     "z_entry": -1.0,
+     "max_names": null,
+     "selection": "all with z < z_entry, equal-weight; cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2020-12-03",
+    "end": "2021-12-31",
+    "n_bars": 252,
+    "n_scaled_down": 10,
+    "n_sell_capped": 0,
+    "period_start": "2021-01-04"
+   },
+   "Trend(SMA50>SMA200)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 200,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "Trend(SMA50>SMA200)",
+    "params": {
+     "fast": 50,
+     "slow": 200,
+     "sizing": "equal",
+     "selection": "equal-weight all with SMA_fast > SMA_slow; cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2020-03-19",
+    "end": "2021-12-31",
+    "n_bars": 252,
+    "n_scaled_down": 11,
+    "n_sell_capped": 0,
+    "period_start": "2021-01-04"
+   },
+   "Trend(SMA50>SMA200), 1/N slots": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 200,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "Trend(SMA50>SMA200), 1/N slots",
+    "params": {
+     "fast": 50,
+     "slow": 200,
+     "sizing": "slots",
+     "selection": "1/N in each name with SMA_fast > SMA_slow, its slot in cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2020-03-19",
+    "end": "2021-12-31",
+    "n_bars": 252,
+    "n_scaled_down": 4,
+    "n_sell_capped": 0,
+    "period_start": "2021-01-04"
+   },
+   "WeightedTrend(21/63/126/252)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 252,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "WeightedTrend(21/63/126/252)",
+    "params": {
+     "horizons": [
+      21,
+      63,
+      126,
+      252
+     ],
+     "max_weight": 0.25,
+     "weighting": "blend of horizon returns, clipped at 0, normalised to 1 (cash if none > 0)",
+     "rebalance": "monthly"
+    },
+    "start": "2020-01-03",
+    "end": "2021-12-31",
+    "n_bars": 252,
+    "n_scaled_down": 2,
+    "n_sell_capped": 0,
+    "period_start": "2021-01-04"
+   },
+   "MomTop5(12-1m)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 252,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "MomTop5(12-1m)",
+    "params": {
+     "k": 5,
+     "lookback": 252,
+     "skip": 21,
+     "long_only_positive": false,
+     "rebalance": "monthly"
+    },
+    "start": "2020-01-03",
+    "end": "2021-12-31",
+    "n_bars": 252,
+    "n_scaled_down": 1,
+    "n_sell_capped": 0,
+    "period_start": "2021-01-04"
+   },
+   "EW-rebal (monthly)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "EW-rebal",
+    "params": {},
+    "start": "2021-01-04",
+    "end": "2021-12-31",
+    "n_bars": 252,
+    "n_scaled_down": 1,
+    "n_sell_capped": 0,
+    "period_start": "2021-01-04"
+   },
+   "EW-hold": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "EW-hold",
+    "params": {},
+    "start": "2021-01-04",
+    "end": "2021-12-31",
+    "n_bars": 252,
+    "n_scaled_down": 0,
+    "n_sell_capped": 0,
+    "period_start": "2021-01-04"
+   },
+   "SPY (reference)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "SPY",
+    "params": {},
+    "start": "2021-01-04",
+    "end": "2021-12-31",
+    "n_bars": 252,
+    "n_scaled_down": 0,
+    "n_sell_capped": 0,
+    "period_start": "2021-01-04"
+   }
+  },
+  "no costs": {
+   "MeanRev(N=20,z<-1)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 20,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "MeanRev(N=20,z<-1)",
+    "params": {
+     "lookback": 20,
+     "z_entry": -1.0,
+     "max_names": null,
+     "selection": "all with z < z_entry, equal-weight; cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2020-12-03",
+    "end": "2021-12-31",
+    "n_bars": 252,
+    "n_scaled_down": 9,
+    "n_sell_capped": 0,
+    "period_start": "2021-01-04"
+   },
+   "Trend(SMA50>SMA200)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 200,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "Trend(SMA50>SMA200)",
+    "params": {
+     "fast": 50,
+     "slow": 200,
+     "sizing": "equal",
+     "selection": "equal-weight all with SMA_fast > SMA_slow; cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2020-03-19",
+    "end": "2021-12-31",
+    "n_bars": 252,
+    "n_scaled_down": 17,
+    "n_sell_capped": 0,
+    "period_start": "2021-01-04"
+   },
+   "Trend(SMA50>SMA200), 1/N slots": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 200,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "Trend(SMA50>SMA200), 1/N slots",
+    "params": {
+     "fast": 50,
+     "slow": 200,
+     "sizing": "slots",
+     "selection": "1/N in each name with SMA_fast > SMA_slow, its slot in cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2020-03-19",
+    "end": "2021-12-31",
+    "n_bars": 252,
+    "n_scaled_down": 6,
+    "n_sell_capped": 0,
+    "period_start": "2021-01-04"
+   },
+   "WeightedTrend(21/63/126/252)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 252,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "WeightedTrend(21/63/126/252)",
+    "params": {
+     "horizons": [
+      21,
+      63,
+      126,
+      252
+     ],
+     "max_weight": 0.25,
+     "weighting": "blend of horizon returns, clipped at 0, normalised to 1 (cash if none > 0)",
+     "rebalance": "monthly"
+    },
+    "start": "2020-01-03",
+    "end": "2021-12-31",
+    "n_bars": 252,
+    "n_scaled_down": 2,
+    "n_sell_capped": 0,
+    "period_start": "2021-01-04"
+   },
+   "MomTop5(12-1m)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 252,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "MomTop5(12-1m)",
+    "params": {
+     "k": 5,
+     "lookback": 252,
+     "skip": 21,
+     "long_only_positive": false,
+     "rebalance": "monthly"
+    },
+    "start": "2020-01-03",
+    "end": "2021-12-31",
+    "n_bars": 252,
+    "n_scaled_down": 3,
+    "n_sell_capped": 0,
+    "period_start": "2021-01-04"
+   },
+   "EW-rebal (monthly)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "EW-rebal",
+    "params": {},
+    "start": "2021-01-04",
+    "end": "2021-12-31",
+    "n_bars": 252,
+    "n_scaled_down": 3,
+    "n_sell_capped": 0,
+    "period_start": "2021-01-04"
+   },
+   "EW-hold": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "EW-hold",
+    "params": {},
+    "start": "2021-01-04",
+    "end": "2021-12-31",
+    "n_bars": 252,
+    "n_scaled_down": 0,
+    "n_sell_capped": 0,
+    "period_start": "2021-01-04"
+   },
+   "SPY (reference)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "SPY",
+    "params": {},
+    "start": "2021-01-04",
+    "end": "2021-12-31",
+    "n_bars": 252,
+    "n_scaled_down": 0,
+    "n_sell_capped": 0,
+    "period_start": "2021-01-04"
+   }
+  }
+ },
+ "2022 (drawdown)": {
+  "with costs (10+5 bps)": {
+   "MeanRev(N=20,z<-1)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 20,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "MeanRev(N=20,z<-1)",
+    "params": {
+     "lookback": 20,
+     "z_entry": -1.0,
+     "max_names": null,
+     "selection": "all with z < z_entry, equal-weight; cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2021-12-03",
+    "end": "2022-12-30",
+    "n_bars": 251,
+    "n_scaled_down": 14,
+    "n_sell_capped": 0,
+    "period_start": "2022-01-03"
+   },
+   "Trend(SMA50>SMA200)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 200,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "Trend(SMA50>SMA200)",
+    "params": {
+     "fast": 50,
+     "slow": 200,
+     "sizing": "equal",
+     "selection": "equal-weight all with SMA_fast > SMA_slow; cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2021-03-19",
+    "end": "2022-12-30",
+    "n_bars": 251,
+    "n_scaled_down": 15,
+    "n_sell_capped": 0,
+    "period_start": "2022-01-03"
+   },
+   "Trend(SMA50>SMA200), 1/N slots": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 200,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "Trend(SMA50>SMA200), 1/N slots",
+    "params": {
+     "fast": 50,
+     "slow": 200,
+     "sizing": "slots",
+     "selection": "1/N in each name with SMA_fast > SMA_slow, its slot in cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2021-03-19",
+    "end": "2022-12-30",
+    "n_bars": 251,
+    "n_scaled_down": 1,
+    "n_sell_capped": 0,
+    "period_start": "2022-01-03"
+   },
+   "WeightedTrend(21/63/126/252)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 252,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "WeightedTrend(21/63/126/252)",
+    "params": {
+     "horizons": [
+      21,
+      63,
+      126,
+      252
+     ],
+     "max_weight": 0.25,
+     "weighting": "blend of horizon returns, clipped at 0, normalised to 1 (cash if none > 0)",
+     "rebalance": "monthly"
+    },
+    "start": "2021-01-04",
+    "end": "2022-12-30",
+    "n_bars": 251,
+    "n_scaled_down": 4,
+    "n_sell_capped": 0,
+    "period_start": "2022-01-03"
+   },
+   "MomTop5(12-1m)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 252,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "MomTop5(12-1m)",
+    "params": {
+     "k": 5,
+     "lookback": 252,
+     "skip": 21,
+     "long_only_positive": false,
+     "rebalance": "monthly"
+    },
+    "start": "2021-01-04",
+    "end": "2022-12-30",
+    "n_bars": 251,
+    "n_scaled_down": 4,
+    "n_sell_capped": 0,
+    "period_start": "2022-01-03"
+   },
+   "EW-rebal (monthly)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "EW-rebal",
+    "params": {},
+    "start": "2022-01-03",
+    "end": "2022-12-30",
+    "n_bars": 251,
+    "n_scaled_down": 3,
+    "n_sell_capped": 0,
+    "period_start": "2022-01-03"
+   },
+   "EW-hold": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "EW-hold",
+    "params": {},
+    "start": "2022-01-03",
+    "end": "2022-12-30",
+    "n_bars": 251,
+    "n_scaled_down": 0,
+    "n_sell_capped": 0,
+    "period_start": "2022-01-03"
+   },
+   "SPY (reference)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "SPY",
+    "params": {},
+    "start": "2022-01-03",
+    "end": "2022-12-30",
+    "n_bars": 251,
+    "n_scaled_down": 0,
+    "n_sell_capped": 0,
+    "period_start": "2022-01-03"
+   }
+  },
+  "no costs": {
+   "MeanRev(N=20,z<-1)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 20,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "MeanRev(N=20,z<-1)",
+    "params": {
+     "lookback": 20,
+     "z_entry": -1.0,
+     "max_names": null,
+     "selection": "all with z < z_entry, equal-weight; cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2021-12-03",
+    "end": "2022-12-30",
+    "n_bars": 251,
+    "n_scaled_down": 14,
+    "n_sell_capped": 0,
+    "period_start": "2022-01-03"
+   },
+   "Trend(SMA50>SMA200)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 200,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "Trend(SMA50>SMA200)",
+    "params": {
+     "fast": 50,
+     "slow": 200,
+     "sizing": "equal",
+     "selection": "equal-weight all with SMA_fast > SMA_slow; cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2021-03-19",
+    "end": "2022-12-30",
+    "n_bars": 251,
+    "n_scaled_down": 19,
+    "n_sell_capped": 0,
+    "period_start": "2022-01-03"
+   },
+   "Trend(SMA50>SMA200), 1/N slots": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 200,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "Trend(SMA50>SMA200), 1/N slots",
+    "params": {
+     "fast": 50,
+     "slow": 200,
+     "sizing": "slots",
+     "selection": "1/N in each name with SMA_fast > SMA_slow, its slot in cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2021-03-19",
+    "end": "2022-12-30",
+    "n_bars": 251,
+    "n_scaled_down": 1,
+    "n_sell_capped": 0,
+    "period_start": "2022-01-03"
+   },
+   "WeightedTrend(21/63/126/252)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 252,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "WeightedTrend(21/63/126/252)",
+    "params": {
+     "horizons": [
+      21,
+      63,
+      126,
+      252
+     ],
+     "max_weight": 0.25,
+     "weighting": "blend of horizon returns, clipped at 0, normalised to 1 (cash if none > 0)",
+     "rebalance": "monthly"
+    },
+    "start": "2021-01-04",
+    "end": "2022-12-30",
+    "n_bars": 251,
+    "n_scaled_down": 4,
+    "n_sell_capped": 0,
+    "period_start": "2022-01-03"
+   },
+   "MomTop5(12-1m)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 252,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "MomTop5(12-1m)",
+    "params": {
+     "k": 5,
+     "lookback": 252,
+     "skip": 21,
+     "long_only_positive": false,
+     "rebalance": "monthly"
+    },
+    "start": "2021-01-04",
+    "end": "2022-12-30",
+    "n_bars": 251,
+    "n_scaled_down": 4,
+    "n_sell_capped": 0,
+    "period_start": "2022-01-03"
+   },
+   "EW-rebal (monthly)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "EW-rebal",
+    "params": {},
+    "start": "2022-01-03",
+    "end": "2022-12-30",
+    "n_bars": 251,
+    "n_scaled_down": 4,
+    "n_sell_capped": 0,
+    "period_start": "2022-01-03"
+   },
+   "EW-hold": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "EW-hold",
+    "params": {},
+    "start": "2022-01-03",
+    "end": "2022-12-30",
+    "n_bars": 251,
+    "n_scaled_down": 0,
+    "n_sell_capped": 0,
+    "period_start": "2022-01-03"
+   },
+   "SPY (reference)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "SPY",
+    "params": {},
+    "start": "2022-01-03",
+    "end": "2022-12-30",
+    "n_bars": 251,
+    "n_scaled_down": 0,
+    "n_sell_capped": 0,
+    "period_start": "2022-01-03"
+   }
+  }
+ },
+ "2023-01 .. 2026-08 (recovery)": {
+  "with costs (10+5 bps)": {
+   "MeanRev(N=20,z<-1)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 20,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "MeanRev(N=20,z<-1)",
+    "params": {
+     "lookback": 20,
+     "z_entry": -1.0,
+     "max_names": null,
+     "selection": "all with z < z_entry, equal-weight; cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2022-12-02",
+    "end": "2026-08-14",
+    "n_bars": 907,
+    "n_scaled_down": 66,
+    "n_sell_capped": 0,
+    "period_start": "2023-01-03"
+   },
+   "Trend(SMA50>SMA200)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 200,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "Trend(SMA50>SMA200)",
+    "params": {
+     "fast": 50,
+     "slow": 200,
+     "sizing": "equal",
+     "selection": "equal-weight all with SMA_fast > SMA_slow; cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2022-03-17",
+    "end": "2026-08-14",
+    "n_bars": 907,
+    "n_scaled_down": 62,
+    "n_sell_capped": 0,
+    "period_start": "2023-01-03"
+   },
+   "Trend(SMA50>SMA200), 1/N slots": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 200,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "Trend(SMA50>SMA200), 1/N slots",
+    "params": {
+     "fast": 50,
+     "slow": 200,
+     "sizing": "slots",
+     "selection": "1/N in each name with SMA_fast > SMA_slow, its slot in cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2022-03-17",
+    "end": "2026-08-14",
+    "n_bars": 907,
+    "n_scaled_down": 1,
+    "n_sell_capped": 0,
+    "period_start": "2023-01-03"
+   },
+   "WeightedTrend(21/63/126/252)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 252,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "WeightedTrend(21/63/126/252)",
+    "params": {
+     "horizons": [
+      21,
+      63,
+      126,
+      252
+     ],
+     "max_weight": 0.25,
+     "weighting": "blend of horizon returns, clipped at 0, normalised to 1 (cash if none > 0)",
+     "rebalance": "monthly"
+    },
+    "start": "2021-12-31",
+    "end": "2026-08-14",
+    "n_bars": 907,
+    "n_scaled_down": 21,
+    "n_sell_capped": 0,
+    "period_start": "2023-01-03"
+   },
+   "MomTop5(12-1m)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 252,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "MomTop5(12-1m)",
+    "params": {
+     "k": 5,
+     "lookback": 252,
+     "skip": 21,
+     "long_only_positive": false,
+     "rebalance": "monthly"
+    },
+    "start": "2021-12-31",
+    "end": "2026-08-14",
+    "n_bars": 907,
+    "n_scaled_down": 22,
+    "n_sell_capped": 0,
+    "period_start": "2023-01-03"
+   },
+   "EW-rebal (monthly)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "EW-rebal",
+    "params": {},
+    "start": "2023-01-03",
+    "end": "2026-08-14",
+    "n_bars": 907,
+    "n_scaled_down": 18,
+    "n_sell_capped": 0,
+    "period_start": "2023-01-03"
+   },
+   "EW-hold": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "EW-hold",
+    "params": {},
+    "start": "2023-01-03",
+    "end": "2026-08-14",
+    "n_bars": 907,
+    "n_scaled_down": 0,
+    "n_sell_capped": 0,
+    "period_start": "2023-01-03"
+   },
+   "SPY (reference)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 10.0,
+    "slippage_bps": 5.0,
+    "strategy": "SPY",
+    "params": {},
+    "start": "2023-01-03",
+    "end": "2026-08-14",
+    "n_bars": 907,
+    "n_scaled_down": 0,
+    "n_sell_capped": 0,
+    "period_start": "2023-01-03"
+   }
+  },
+  "no costs": {
+   "MeanRev(N=20,z<-1)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 20,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "MeanRev(N=20,z<-1)",
+    "params": {
+     "lookback": 20,
+     "z_entry": -1.0,
+     "max_names": null,
+     "selection": "all with z < z_entry, equal-weight; cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2022-12-02",
+    "end": "2026-08-14",
+    "n_bars": 907,
+    "n_scaled_down": 61,
+    "n_sell_capped": 0,
+    "period_start": "2023-01-03"
+   },
+   "Trend(SMA50>SMA200)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 200,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "Trend(SMA50>SMA200)",
+    "params": {
+     "fast": 50,
+     "slow": 200,
+     "sizing": "equal",
+     "selection": "equal-weight all with SMA_fast > SMA_slow; cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2022-03-17",
+    "end": "2026-08-14",
+    "n_bars": 907,
+    "n_scaled_down": 85,
+    "n_sell_capped": 0,
+    "period_start": "2023-01-03"
+   },
+   "Trend(SMA50>SMA200), 1/N slots": {
+    "initial_cash": 1000000.0,
+    "rebalance": "weekly",
+    "warmup": 200,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "Trend(SMA50>SMA200), 1/N slots",
+    "params": {
+     "fast": 50,
+     "slow": 200,
+     "sizing": "slots",
+     "selection": "1/N in each name with SMA_fast > SMA_slow, its slot in cash otherwise",
+     "rebalance": "weekly"
+    },
+    "start": "2022-03-17",
+    "end": "2026-08-14",
+    "n_bars": 907,
+    "n_scaled_down": 2,
+    "n_sell_capped": 0,
+    "period_start": "2023-01-03"
+   },
+   "WeightedTrend(21/63/126/252)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 252,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "WeightedTrend(21/63/126/252)",
+    "params": {
+     "horizons": [
+      21,
+      63,
+      126,
+      252
+     ],
+     "max_weight": 0.25,
+     "weighting": "blend of horizon returns, clipped at 0, normalised to 1 (cash if none > 0)",
+     "rebalance": "monthly"
+    },
+    "start": "2021-12-31",
+    "end": "2026-08-14",
+    "n_bars": 907,
+    "n_scaled_down": 22,
+    "n_sell_capped": 0,
+    "period_start": "2023-01-03"
+   },
+   "MomTop5(12-1m)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 252,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "MomTop5(12-1m)",
+    "params": {
+     "k": 5,
+     "lookback": 252,
+     "skip": 21,
+     "long_only_positive": false,
+     "rebalance": "monthly"
+    },
+    "start": "2021-12-31",
+    "end": "2026-08-14",
+    "n_bars": 907,
+    "n_scaled_down": 23,
+    "n_sell_capped": 0,
+    "period_start": "2023-01-03"
+   },
+   "EW-rebal (monthly)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "EW-rebal",
+    "params": {},
+    "start": "2023-01-03",
+    "end": "2026-08-14",
+    "n_bars": 907,
+    "n_scaled_down": 24,
+    "n_sell_capped": 0,
+    "period_start": "2023-01-03"
+   },
+   "EW-hold": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "EW-hold",
+    "params": {},
+    "start": "2023-01-03",
+    "end": "2026-08-14",
+    "n_bars": 907,
+    "n_scaled_down": 0,
+    "n_sell_capped": 0,
+    "period_start": "2023-01-03"
+   },
+   "SPY (reference)": {
+    "initial_cash": 1000000.0,
+    "rebalance": "monthly",
+    "warmup": 0,
+    "commission_bps": 0.0,
+    "slippage_bps": 0.0,
+    "strategy": "SPY",
+    "params": {},
+    "start": "2023-01-03",
+    "end": "2026-08-14",
+    "n_bars": 907,
+    "n_scaled_down": 0,
+    "n_sell_capped": 0,
+    "period_start": "2023-01-03"
+   }
+  }
+ }
+}

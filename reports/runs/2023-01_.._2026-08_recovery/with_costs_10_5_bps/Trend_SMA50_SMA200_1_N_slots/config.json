@@ -1,0 +1,22 @@
+{
+  "name": "Trend(SMA50>SMA200), 1/N slots",
+  "initial_cash": 1000000.0,
+  "rebalance": "weekly",
+  "warmup": 200,
+  "commission_bps": 10.0,
+  "slippage_bps": 5.0,
+  "strategy": "Trend(SMA50>SMA200), 1/N slots",
+  "params": {
+    "fast": 50,
+    "slow": 200,
+    "sizing": "slots",
+    "selection": "1/N in each name with SMA_fast > SMA_slow, its slot in cash otherwise",
+    "rebalance": "weekly"
+  },
+  "start": "2022-03-17",
+  "end": "2026-08-14",
+  "n_bars": 907,
+  "n_scaled_down": 1,
+  "n_sell_capped": 0,
+  "period_start": "2023-01-03"
+}

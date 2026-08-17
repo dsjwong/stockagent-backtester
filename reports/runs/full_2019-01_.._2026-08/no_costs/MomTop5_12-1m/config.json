@@ -1,0 +1,22 @@
+{
+  "name": "MomTop5(12-1m)",
+  "initial_cash": 1000000.0,
+  "rebalance": "monthly",
+  "warmup": 251,
+  "commission_bps": 0.0,
+  "slippage_bps": 0.0,
+  "strategy": "MomTop5(12-1m)",
+  "params": {
+    "k": 5,
+    "lookback": 252,
+    "skip": 21,
+    "long_only_positive": false,
+    "rebalance": "monthly"
+  },
+  "start": "2018-01-02",
+  "end": "2026-08-14",
+  "n_bars": 1915,
+  "n_scaled_down": 42,
+  "n_sell_capped": 0,
+  "period_start": "2019-01-02"
+}
