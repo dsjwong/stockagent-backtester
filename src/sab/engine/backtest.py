@@ -108,6 +108,7 @@ class BacktestResult:
     trades: list[Fill]
     config: dict[str, Any]
     broker_events: list[str] = field(default_factory=list)
+    decisions: pd.DataFrame | None = None   # per-decision log for strategies that keep one (LLM agents)
 
     @property
     def exposure(self) -> pd.Series:
@@ -137,6 +138,12 @@ class BacktestResult:
         self.weights.to_parquet(d / "weights.parquet")
         self.trades_frame().to_parquet(d / "trades.parquet")
         (d / "config.json").write_text(json.dumps({"name": self.name, **self.config}, indent=2))
+        if self.decisions is not None:
+            dec = self.decisions.copy()
+            for c in dec.columns:                       # dict/None cells -> JSON strings for parquet
+                if dec[c].map(lambda v: isinstance(v, (dict, list))).any():
+                    dec[c] = dec[c].map(lambda v: json.dumps(v) if isinstance(v, (dict, list)) else v)
+            dec.to_parquet(d / "decisions.parquet")
         return d
 
 
@@ -218,4 +225,5 @@ def run_backtest(
                 "start": str(dates[0].date()), "end": str(dates[-1].date()), "n_bars": T,
                 "n_scaled_down": broker.n_scaled_down, "n_sell_capped": broker.n_sell_capped},
         broker_events=broker.events,
+        decisions=strategy.decisions_frame() if hasattr(strategy, "decisions_frame") else None,
     )

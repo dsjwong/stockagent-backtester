@@ -14,10 +14,13 @@ dependencies = [
     "numpy>=1.26",
     "matplotlib>=3.8",
     "requests>=2.31",
+    "python-dotenv>=1.0",
 ]
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
+# real model providers (M4). Not needed for the mock providers or the tests; `sab.llm` imports them lazily.
+llm = ["anthropic>=0.40", "openai>=1.40", "google-genai>=1.0"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
