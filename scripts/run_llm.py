@@ -5,6 +5,12 @@ provider is chosen. Examples:
     .venv/bin/python scripts/run_llm.py --provider mock --model mock_ew --mode anon --period 2022
     .venv/bin/python scripts/run_llm.py --estimate-tokens --period 2021 --period 2022 --period full
     .venv/bin/python scripts/run_llm.py --provider anthropic --model claude-haiku-4-5 --mode anon --period 2022
+    .venv/bin/python scripts/run_llm.py --provider gemini --model gemini-3.6-flash --mode anon --period 2022 --verbose
+    .venv/bin/python scripts/run_llm.py --provider gemini --model gemini-3.6-flash --mode anon --consistency 2022-06-13 --n 5 --ctemp 0.7
+
+Real providers: every (prompt -> response) is cached on disk, so a run that dies on a daily quota
+(exit code 2, QuotaExhausted) is resumed by re-running the same command -- completed decisions are
+served from the cache and only the missing ones are requested.
 
 Comparison set (decisions.md #22): EW-rebal monthly (official), EW-hold, SPY (reference), both
 Trend sizings (weekly), WeightedTrend (monthly). Period handling is the same as run_classical.py
@@ -29,10 +35,11 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from run_classical import PERIODS, run_period, slug  # noqa: E402
 from sab.data.universe import BENCHMARK, TICKERS  # noqa: E402
 from sab.engine import CostModel, ZeroCost, load_market  # noqa: E402
-from sab.engine.backtest import rebalance_bars  # noqa: E402
+from sab.engine.backtest import Context, rebalance_bars  # noqa: E402
 from sab.engine.types import PortfolioState  # noqa: E402
 from sab.llm import LLMAgent, build_prompt  # noqa: E402
-from sab.llm.providers import approx_tokens  # noqa: E402
+from sab.llm.providers import QuotaExhausted, approx_tokens  # noqa: E402
+from sab.llm.strategy import consistency_check  # noqa: E402
 from sab.llm.strategy import HIST_BARS  # noqa: E402
 from sab.metrics.metrics import format_table, summary_table  # noqa: E402
 from sab.strategies import EqualWeight, SpyReference, TrendFollowing, WeightedTrend  # noqa: E402
@@ -82,8 +89,17 @@ def run(args) -> None:
     for p in args.period:
         label, start, end = resolve_period(p)
         agent = LLMAgent(args.provider, args.model, args.mode, lookback=args.lookback, rebalance=args.rebalance,
-                         temperature=args.temperature, seed=args.seed, bypass_cache=args.no_cache)
-        res = run_period(agent, market, start, end, agent.rebalance, agent.warmup, cost)
+                         temperature=args.temperature, seed=args.seed, bypass_cache=args.no_cache, verbose=args.verbose)
+        print(f"\n-- {label} | {agent.name} | rebalance={agent.rebalance} T={agent.temperature} seed={agent.seed}", flush=True)
+        try:
+            res = run_period(agent, market, start, end, agent.rebalance, agent.warmup, cost)
+        except QuotaExhausted as e:
+            dec = agent.decisions_frame()
+            print(f"\n!! QUOTA EXHAUSTED after {len(dec)} decisions ({agent.n_provider_calls} fresh calls this run; "
+                  f"{int(dec['cache_hit'].sum()) if len(dec) else 0} served from cache). {e}\n"
+                  f"   Completed decisions are in data/llm_cache/; re-run the SAME command later to resume "
+                  f"(only missing decisions are requested). Nothing saved for {label}.", flush=True)
+            raise SystemExit(2)
         res.decisions = agent.decisions_frame()          # trimmed result keeps the full log (dates are within period anyway)
         runs = {agent.name: res}
         for name, strat, reb, warm in benchmarks():
@@ -154,6 +170,49 @@ def estimate(args) -> None:
           "with thinking-on models the completion side can be several times larger than the estimate.")
 
 
+def consistency(args) -> None:
+    """Same prompt, `n` fresh calls at `ctemp` (cache bypassed, nothing cached): how often do the
+    parsed weights agree? Portfolio state = all cash at the decision date (the prompt is what a
+    fresh run would see on that bar). Saved under reports/runs/llm/consistency/."""
+    market = load_market(list(TICKERS))
+    date = pd.Timestamp(args.consistency)
+    t = int(market.dates.searchsorted(date))
+    if t >= len(market.dates) or market.dates[t] != date:
+        raise SystemExit(f"{args.consistency} is not a trading day in the snapshot (next: {market.dates[min(t, len(market.dates)-1)].date()})")
+    agent = LLMAgent(args.provider, args.model, args.mode, lookback=args.lookback, rebalance=args.rebalance,
+                     temperature=args.temperature, seed=args.seed)
+    st = PortfolioState(cash=1_000_000.0)
+    st.mark(market.dates[t], market.close.iloc[t])
+    ctx = Context(market.close.iloc[: t + 1], market.open.iloc[: t + 1], st, t, ZeroCost)
+    try:
+        out = consistency_check(agent, ctx, n=args.n, temperature=args.ctemp)
+    except QuotaExhausted as e:
+        print(f"!! QUOTA EXHAUSTED during consistency check: {e}")
+        raise SystemExit(2)
+    out.update({"provider": args.provider, "model": args.model, "mode": args.mode, "date": str(date.date()),
+                "bar_index": t, "lookback": args.lookback, "seed_mapping": agent.mapping.to_dict() if args.mode == "anon" else None})
+    # de-anonymise for the report and summarise disagreement
+    real = []
+    for a in out["answers"]:
+        real.append(None if a is None else {agent.mapping.to_real.get(k, k): v for k, v in a.items() if v > 1e-6})
+    out["answers_real"] = real
+    exps = [sum(a.values()) for a in real if a is not None]
+    out["exposures"] = exps
+    if len([a for a in real if a]) >= 2:
+        names = sorted({k for a in real if a for k in a})
+        mat = pd.DataFrame([[a.get(k, 0.0) if a else float("nan") for k in names] for a in real], columns=names)
+        out["weight_std_mean"] = float(mat.std(ddof=0).mean())
+        out["weight_range_max"] = float((mat.max() - mat.min()).max())
+        out["mean_weights_real"] = {k: round(float(v), 4) for k, v in mat.mean().items()}
+    print(json.dumps({k: v for k, v in out.items() if k not in ("texts", "seed_mapping")}, indent=1, default=str))
+    if not args.no_save:
+        d = RUNS / "consistency"
+        d.mkdir(parents=True, exist_ok=True)
+        f = d / f"{slug(agent.name)}_{date.date()}_T{args.ctemp:g}_n{args.n}.json"
+        f.write_text(json.dumps(out, indent=1, default=str))
+        print(f"saved {f}")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--provider", default="mock")
@@ -168,10 +227,16 @@ def main() -> None:
     ap.add_argument("--no-cache", action="store_true", help="bypass the disk cache (still writes)")
     ap.add_argument("--no-save", action="store_true")
     ap.add_argument("--estimate-tokens", action="store_true", help="only build prompts and print token/cost estimates")
+    ap.add_argument("--verbose", action="store_true", help="one progress line per decision")
+    ap.add_argument("--consistency", metavar="DATE", help="consistency check at DATE instead of a backtest")
+    ap.add_argument("--n", type=int, default=5, help="consistency: number of repeated calls")
+    ap.add_argument("--ctemp", type=float, default=0.7, help="consistency: sampling temperature")
     args = ap.parse_args()
     args.period = args.period or ["2022"]
     if args.estimate_tokens:
         estimate(args)
+    elif args.consistency:
+        consistency(args)
     else:
         run(args)
 

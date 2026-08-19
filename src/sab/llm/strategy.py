@@ -37,7 +37,7 @@ class LLMAgent:
     def __init__(self, provider: str = "mock", model: str = "mock", mode: Mode = "anon", lookback: int = 60,
                  rebalance: str = "weekly", temperature: float = 0.0, seed: int = 0, *,
                  tickers: Iterable[str] | None = None, max_tokens: int = 400, cache: LLMCache | None = DEFAULT_CACHE,
-                 bypass_cache: bool = False, max_retries: int = 1) -> None:
+                 bypass_cache: bool = False, max_retries: int = 1, verbose: bool = False) -> None:
         if mode not in ("real", "anon"):
             raise ValueError("mode must be 'real' or 'anon'")
         if rebalance not in ("daily", "weekly", "monthly"):
@@ -53,6 +53,7 @@ class LLMAgent:
         self._initial_equity: float | None = None
         self._log: list[dict[str, Any]] = []
         self.n_provider_calls = 0            # completions that were NOT served from cache
+        self.verbose = bool(verbose)         # one progress line per decision (real-provider runs take minutes)
 
     # ------------------------------------------------------------------ bookkeeping
     @property
@@ -117,6 +118,11 @@ class LLMAgent:
             "error": meta["error"],
         }
         self._log.append(row)
+        if self.verbose:
+            print(f"  [{len(self._log):3d}] {pd.Timestamp(ctx.date).date()} {'cache' if row['cache_hit'] else 'CALL '} "
+                  f"calls={row['n_calls']} exp={row['exposure']:.2f} held={row['n_held']:2d} "
+                  f"{'RETRY ' if row['retried'] else ''}{'FALLBACK ' if row['fallback'] else ''}"
+                  f"rep={row['n_repairs']} tok={row['prompt_tokens']}+{row['completion_tokens']} {row['latency_s']:.1f}s", flush=True)
         return weights, {"spec": spec, **meta, "row": row}
 
     def on_bar(self, ctx: Context) -> list[Order]:

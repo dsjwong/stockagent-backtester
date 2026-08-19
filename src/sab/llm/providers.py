@@ -13,10 +13,11 @@ in whatever namespace (real or anonymised) the prompt uses.
 
 Hosted / local (thin adapters, NOT exercised in M4a -- no network in tests):
 * `anthropic` (ANTHROPIC_API_KEY), `openai` (OPENAI_API_KEY), `gemini` (GEMINI_API_KEY or
-  GOOGLE_API_KEY), `ollama` (OLLAMA_HOST, default http://localhost:11434, uses `requests`).
+  GOOGLE_API_KEY; REST via `requests`, paced + 429 backoff, see `_gemini`), `ollama`
+  (OLLAMA_HOST, default http://localhost:11434, uses `requests`).
   SDKs are imported lazily inside the adapter, credentials are read from the environment after
   an optional `.env` load (python-dotenv), and a missing SDK raises ImportError with the pip
-  extra to install (`pip install -e '.[llm]'`).
+  extra to install (`pip install -e '.[llm]'`). `gemini` and `ollama` need no SDK.
 
 `complete()` consults the disk cache first (sab.llm.cache) unless `bypass_cache=True`; every
 fresh response is written back, so a replay never calls a provider.
@@ -31,6 +32,7 @@ import os
 import re
 import time
 from dataclasses import asdict, dataclass, field
+from pathlib import Path
 from typing import Any, Callable
 
 import numpy as np
@@ -118,10 +120,13 @@ def _mock_random(model: str, prompt: str, temperature: float, max_tokens: int, s
 
 # --------------------------------------------------------------------------- real adapters (lazy)
 
+_ENV_FILE = Path(__file__).resolve().parents[3] / ".env"
+
+
 def _load_env() -> None:
     try:
         from dotenv import load_dotenv     # optional; a plain environment works too
-        load_dotenv()
+        load_dotenv(_ENV_FILE)             # explicit path: find_dotenv() breaks under stdin/-c
     except ImportError:
         pass
 
@@ -174,22 +179,127 @@ def _openai(model: str, prompt: str, temperature: float, max_tokens: int, seed: 
                        model=r.model, latency_s=time.perf_counter() - t0, provider="openai")
 
 
-def _gemini(model: str, prompt: str, temperature: float, max_tokens: int, seed: int | None) -> LLMResponse:
+class QuotaExhausted(RuntimeError):
+    """A provider said the quota is gone for the day (or retries ran out on 429s). The run
+    script catches this, reports which decisions completed (they are all in the cache) and
+    stops -- it never burns the remaining quota on blind retries."""
+
+
+GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+_last_call_at: dict[str, float] = {}
+
+
+def _pace(provider: str, min_interval: float) -> None:
+    """Sleep so that consecutive calls to `provider` are at least `min_interval` seconds apart
+    (free tiers are rate-limited per minute; 6.5 s ~ 9 requests/min)."""
+    last = _last_call_at.get(provider)
+    if last is not None and min_interval > 0:
+        wait = min_interval - (time.monotonic() - last)
+        if wait > 0:
+            time.sleep(wait)
+    _last_call_at[provider] = time.monotonic()
+
+
+def _gemini_retry_delay(r) -> float | None:
+    """Seconds to wait as advertised by a 429: `Retry-After` header, else the RetryInfo detail."""
+    ra = r.headers.get("retry-after")
+    if ra:
+        try:
+            return float(ra)
+        except ValueError:
+            pass
     try:
-        from google import genai
-        from google.genai import types
-    except ImportError:
-        _need("google-genai")
-    client = genai.Client(api_key=_env_key("GEMINI_API_KEY", "GOOGLE_API_KEY"))
-    cfg = types.GenerateContentConfig(temperature=temperature, max_output_tokens=max_tokens,
-                                      **({"seed": int(seed)} if seed is not None else {}))
+        for d in r.json().get("error", {}).get("details", []):
+            rd = d.get("retryDelay")
+            if rd:
+                return float(str(rd).rstrip("s"))
+    except Exception:
+        pass
+    return None
+
+
+def _gemini_is_daily(r) -> bool:
+    try:
+        err = r.json().get("error", {})
+    except Exception:
+        return False
+    blob = json.dumps(err).lower()
+    return "perday" in blob or "per day" in blob or "daily" in blob
+
+
+def _gemini(model: str, prompt: str, temperature: float, max_tokens: int, seed: int | None) -> LLMResponse:
+    """REST adapter (no SDK; `requests` is a core dependency). Free-tier discipline:
+    * paced: >= SAB_GEMINI_MIN_INTERVAL seconds between calls (default 4.5 -> ~13/min; free tier is 15 RPM on flash-lite, 5 RPM on flash),
+    * 429 -> honours Retry-After / RetryInfo, else exponential backoff (2, 4, 8, ... s),
+      at most SAB_GEMINI_MAX_RETRIES (default 6) times; a 429 that names a daily quota, or
+      exhausted retries, raises QuotaExhausted so the caller stops instead of burning quota,
+    * 5xx and network errors (proxy/reset/timeout) -> same backoff; other 4xx -> RuntimeError with the API message.
+    Thinking is set to SAB_GEMINI_THINKING (default `minimal`, Gemini 3 `thinkingLevel`; set to
+    `off` to send no thinkingConfig) so `max_tokens` is spent on the answer, not on thoughts.
+    Returned text = concatenation of non-thought parts."""
+    import requests   # core dependency
+    key = _env_key("GEMINI_API_KEY", "GOOGLE_API_KEY")
+    min_interval = float(os.environ.get("SAB_GEMINI_MIN_INTERVAL", "4.5"))
+    max_retries = int(os.environ.get("SAB_GEMINI_MAX_RETRIES", "6"))
+    thinking = os.environ.get("SAB_GEMINI_THINKING", "minimal")
+    gen: dict[str, Any] = {"temperature": temperature, "maxOutputTokens": max_tokens}
+    if seed is not None:
+        gen["seed"] = int(seed)
+    if thinking and thinking.lower() != "off":
+        gen["thinkingConfig"] = {"thinkingLevel": thinking}
+    body = {"contents": [{"role": "user", "parts": [{"text": prompt}]}], "generationConfig": gen}
+    url = GEMINI_URL.format(model=model)
+    headers = {"x-goog-api-key": key, "Content-Type": "application/json"}
     t0 = time.perf_counter()
-    r = client.models.generate_content(model=model, contents=prompt, config=cfg)
-    um = getattr(r, "usage_metadata", None)
-    return LLMResponse(text=r.text or "",
-                       usage={"prompt_tokens": getattr(um, "prompt_token_count", 0) or 0,
-                              "completion_tokens": getattr(um, "candidates_token_count", 0) or 0},
-                       model=model, latency_s=time.perf_counter() - t0, provider="gemini")
+    for attempt in range(max_retries + 1):
+        _pace("gemini", min_interval)
+        try:
+            r = requests.post(url, headers=headers, json=body, timeout=float(os.environ.get("SAB_GEMINI_TIMEOUT", "120")))
+        except requests.exceptions.RequestException as e:      # proxy hiccup, reset, timeout: back off and retry
+            if attempt == max_retries:
+                raise RuntimeError(f"gemini {model}: network error after {max_retries} retries: {e}") from e
+            time.sleep(float(2 ** (attempt + 1)))
+            continue
+        if r.status_code == 200:
+            break
+        if r.status_code == 429:
+            if _gemini_is_daily(r):
+                raise QuotaExhausted(f"gemini {model}: daily quota exhausted (429): {_api_message(r)}")
+            if attempt == max_retries:
+                raise QuotaExhausted(f"gemini {model}: still 429 after {max_retries} retries: {_api_message(r)}")
+            delay = _gemini_retry_delay(r) or float(2 ** (attempt + 1))
+            time.sleep(min(delay, 120.0) + 1.0)
+            continue
+        if 500 <= r.status_code < 600 and attempt < max_retries:
+            time.sleep(float(2 ** (attempt + 1)))
+            continue
+        raise RuntimeError(f"gemini {model}: HTTP {r.status_code}: {_api_message(r)}")
+    d = r.json()
+    cands = d.get("candidates") or []
+    parts = (cands[0].get("content") or {}).get("parts", []) if cands else []
+    text = "".join(p.get("text", "") for p in parts if not p.get("thought"))
+    um = d.get("usageMetadata", {}) or {}
+    return LLMResponse(text=text,
+                       usage={"prompt_tokens": int(um.get("promptTokenCount", 0) or 0),
+                              "completion_tokens": int(um.get("candidatesTokenCount", 0) or 0),
+                              "thought_tokens": int(um.get("thoughtsTokenCount", 0) or 0),
+                              "finish_reason": (cands[0].get("finishReason", "") if cands else "NO_CANDIDATE")},
+                       model=d.get("modelVersion", model), latency_s=time.perf_counter() - t0, provider="gemini")
+
+
+def _api_message(r) -> str:
+    """Message plus the quota ids / retry delay from the error details (what the 429 is really about)."""
+    try:
+        err = r.json().get("error", {})
+        extra = []
+        for d in err.get("details", []):
+            for v in d.get("violations", []) or []:
+                extra.append(f"quotaId={v.get('quotaId')} metric={v.get('quotaMetric')}")
+            if d.get("retryDelay"):
+                extra.append(f"retryDelay={d['retryDelay']}")
+        return str(err.get("message", r.text[:300])) + (" [" + "; ".join(extra) + "]" if extra else "")
+    except Exception:
+        return r.text[:300]
 
 
 def _ollama(model: str, prompt: str, temperature: float, max_tokens: int, seed: int | None) -> LLMResponse:

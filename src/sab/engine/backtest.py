@@ -146,6 +146,24 @@ class BacktestResult:
             dec.to_parquet(d / "decisions.parquet")
         return d
 
+    @classmethod
+    def load(cls, directory: str | Path) -> "BacktestResult":
+        """Inverse of `save` (used by the report scripts so tables never need a re-run)."""
+        d = Path(directory)
+        eq = pd.read_parquet(d / "equity.parquet")
+        cfg = json.loads((d / "config.json").read_text())
+        tf = pd.read_parquet(d / "trades.parquet")
+        trades = [Fill(date=pd.Timestamp(r.date), ticker=str(r.ticker), side=r.side, qty=int(r.qty), price=float(r.price),
+                       commission=float(r.commission), slippage=float(r.slippage)) for r in tf.itertuples(index=False)]
+        dec = None
+        if (d / "decisions.parquet").exists():
+            dec = pd.read_parquet(d / "decisions.parquet")
+            for c in ("weights", "repairs"):
+                if c in dec.columns:
+                    dec[c] = dec[c].map(lambda v: json.loads(v) if isinstance(v, str) else v)
+        return cls(name=str(cfg.pop("name", d.name)), equity=eq["equity"], cash=eq["cash"], weights=pd.read_parquet(d / "weights.parquet"),
+                   turnover=eq["turnover"], trades=trades, config=cfg, decisions=dec)
+
 
 def rebalance_bars(dates: pd.DatetimeIndex, freq: Rebalance, warmup: int) -> set[int]:
     """Bar indices on which the strategy is asked for orders.

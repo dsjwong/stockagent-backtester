@@ -1,0 +1,47 @@
+{
+  "name": "LLM(gemini/gemini-3.5-flash-lite, anon)",
+  "initial_cash": 1000000.0,
+  "rebalance": "weekly",
+  "warmup": 127,
+  "commission_bps": 10.0,
+  "slippage_bps": 5.0,
+  "strategy": "LLM(gemini/gemini-3.5-flash-lite, anon)",
+  "params": {
+    "provider": "gemini",
+    "model": "gemini-3.5-flash-lite",
+    "mode": "anon",
+    "lookback": 60,
+    "temperature": 0.0,
+    "seed": 0,
+    "max_tokens": 400,
+    "rebalance": "weekly",
+    "warmup": 127,
+    "max_retries": 1,
+    "anon_mapping": {
+      "seed": 0,
+      "ticker_to_anon": {
+        "NVDA": "Stock 01",
+        "UNH": "Stock 02",
+        "AMZN": "Stock 03",
+        "PFE": "Stock 04",
+        "AAPL": "Stock 05",
+        "GOOGL": "Stock 06",
+        "XOM": "Stock 07",
+        "JPM": "Stock 08",
+        "WMT": "Stock 09",
+        "PG": "Stock 10",
+        "BAC": "Stock 11",
+        "JNJ": "Stock 12",
+        "KO": "Stock 13",
+        "CVX": "Stock 14",
+        "MSFT": "Stock 15"
+      }
+    }
+  },
+  "start": "2021-07-02",
+  "end": "2022-12-30",
+  "n_bars": 251,
+  "n_scaled_down": 5,
+  "n_sell_capped": 0,
+  "period_start": "2022-01-03"
+}
