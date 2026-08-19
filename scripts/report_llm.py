@@ -388,7 +388,7 @@ INTERPRETATION.update({
         "2022-anon run that is resumable at 20 requests/day). Each run took 6-20 minutes wall-clock at the paced ~13 requests/min "
         "(latency column includes 429 backoff waits). Re-running any table here costs nothing: the cache is committed.\n\n"
         "**Not done / how to resume.** Full-period 2019-2026 anon run (~397 calls) exceeds one free-tier day: 253 of its decisions "
-        "(2019-01-02 .. 2023-11) are cached, the rest stopped on the daily 500-request cap; re-run "
+        "(2019-01-02 .. 2023-10-30) are cached, the rest stopped on the daily 500-request cap; re-run "
         "`.venv/bin/python scripts/run_llm.py --provider gemini --model gemini-3.5-flash-lite --mode anon --period full --verbose` "
         "after the daily quota resets (midnight Pacific = 15:00 HKT) until it exits 0 -- completed decisions come from the cache -- "
         "then `.venv/bin/python scripts/report_llm.py` to add the period here. Same command with `--period full --mode real`, or "
