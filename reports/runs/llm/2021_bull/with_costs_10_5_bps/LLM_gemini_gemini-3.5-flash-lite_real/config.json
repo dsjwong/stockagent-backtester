@@ -1,0 +1,28 @@
+{
+  "name": "LLM(gemini/gemini-3.5-flash-lite, real)",
+  "initial_cash": 1000000.0,
+  "rebalance": "weekly",
+  "warmup": 127,
+  "commission_bps": 10.0,
+  "slippage_bps": 5.0,
+  "strategy": "LLM(gemini/gemini-3.5-flash-lite, real)",
+  "params": {
+    "provider": "gemini",
+    "model": "gemini-3.5-flash-lite",
+    "mode": "real",
+    "lookback": 60,
+    "temperature": 0.0,
+    "seed": 0,
+    "max_tokens": 400,
+    "rebalance": "weekly",
+    "warmup": 127,
+    "max_retries": 1,
+    "anon_mapping": null
+  },
+  "start": "2020-07-02",
+  "end": "2021-12-31",
+  "n_bars": 252,
+  "n_scaled_down": 0,
+  "n_sell_capped": 0,
+  "period_start": "2021-01-04"
+}

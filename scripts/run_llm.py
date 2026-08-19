@@ -198,7 +198,7 @@ def consistency(args) -> None:
     out["answers_real"] = real
     exps = [sum(a.values()) for a in real if a is not None]
     out["exposures"] = exps
-    if len([a for a in real if a]) >= 2:
+    if len([a for a in real if a is not None]) >= 2:
         names = sorted({k for a in real if a for k in a})
         mat = pd.DataFrame([[a.get(k, 0.0) if a else float("nan") for k in names] for a in real], columns=names)
         out["weight_std_mean"] = float(mat.std(ddof=0).mean())

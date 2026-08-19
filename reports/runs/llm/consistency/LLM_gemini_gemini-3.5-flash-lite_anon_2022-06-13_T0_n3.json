@@ -1,0 +1,124 @@
+{
+ "n": 3,
+ "temperature": 0.0,
+ "n_distinct": 2,
+ "fraction_identical": 0.6666666666666666,
+ "prompt_sha256": "76fa47347eadec7ac470e9819b964026d2f7d6bf0cb379b8860841683374173e",
+ "answers": [
+  {
+   "Stock 01": 0.0,
+   "Stock 02": 0.0,
+   "Stock 03": 0.0,
+   "Stock 04": 0.0,
+   "Stock 05": 0.0,
+   "Stock 06": 0.0,
+   "Stock 07": 0.6,
+   "Stock 08": 0.0,
+   "Stock 09": 0.0,
+   "Stock 10": 0.0,
+   "Stock 11": 0.0,
+   "Stock 12": 0.1,
+   "Stock 13": 0.2,
+   "Stock 14": 0.1,
+   "Stock 15": 0.0
+  },
+  {
+   "Stock 01": 0.0,
+   "Stock 02": 0.0,
+   "Stock 03": 0.0,
+   "Stock 04": 0.0,
+   "Stock 05": 0.0,
+   "Stock 06": 0.0,
+   "Stock 07": 0.6,
+   "Stock 08": 0.0,
+   "Stock 09": 0.0,
+   "Stock 10": 0.0,
+   "Stock 11": 0.0,
+   "Stock 12": 0.1,
+   "Stock 13": 0.2,
+   "Stock 14": 0.1,
+   "Stock 15": 0.0
+  },
+  {
+   "Stock 01": 0.0,
+   "Stock 02": 0.0,
+   "Stock 03": 0.0,
+   "Stock 04": 0.0,
+   "Stock 05": 0.0,
+   "Stock 06": 0.0,
+   "Stock 07": 0.5,
+   "Stock 08": 0.0,
+   "Stock 09": 0.0,
+   "Stock 10": 0.0,
+   "Stock 11": 0.0,
+   "Stock 12": 0.2,
+   "Stock 13": 0.2,
+   "Stock 14": 0.1,
+   "Stock 15": 0.0
+  }
+ ],
+ "texts": [
+  "{\"weights\": {\"Stock 01\": 0.0, \"Stock 02\": 0.0, \"Stock 03\": 0.0, \"Stock 04\": 0.0, \"Stock 05\": 0.0, \"Stock 06\": 0.0, \"Stock 07\": 0.6, \"Stock 08\": 0.0, \"Stock 09\": 0.0, \"Stock 10\": 0.0, \"Stock 11\": 0.0, \"Stock 12\": 0.1, \"Stock 13\": 0.2, \"Stock 14\": 0.1, \"Stock 15\": 0.0}, \"rationale\": \"Allocate to strong momentum leaders (Stock 07, Stock 14) and resilient low-beta performers (Stock 13, Stock 12) showing positive medium-term trends, holding remainder in cash.\"}",
+  "{\"weights\": {\"Stock 01\": 0.0, \"Stock 02\": 0.0, \"Stock 03\": 0.0, \"Stock 04\": 0.0, \"Stock 05\": 0.0, \"Stock 06\": 0.0, \"Stock 07\": 0.6, \"Stock 08\": 0.0, \"Stock 09\": 0.0, \"Stock 10\": 0.0, \"Stock 11\": 0.0, \"Stock 12\": 0.1, \"Stock 13\": 0.2, \"Stock 14\": 0.1, \"Stock 15\": 0.0}, \"rationale\": \"Focus capital on top medium-term momentum leaders (Stock 07, Stock 13, Stock 14, Stock 12) showing relative strength while avoiding the broader market downturn.\"}",
+  "{\"weights\": {\"Stock 01\": 0.0, \"Stock 02\": 0.0, \"Stock 03\": 0.0, \"Stock 04\": 0.0, \"Stock 05\": 0.0, \"Stock 06\": 0.0, \"Stock 07\": 0.5, \"Stock 08\": 0.0, \"Stock 09\": 0.0, \"Stock 10\": 0.0, \"Stock 11\": 0.0, \"Stock 12\": 0.2, \"Stock 13\": 0.2, \"Stock 14\": 0.1, \"Stock 15\": 0.0}, \"rationale\": \"Focus capital on top medium-term momentum leaders (Stock 07, Stock 13, Stock 12, Stock 14) showing relative strength against broad market weakness.\"}"
+ ],
+ "provider": "gemini",
+ "model": "gemini-3.5-flash-lite",
+ "mode": "anon",
+ "date": "2022-06-13",
+ "bar_index": 1119,
+ "lookback": 60,
+ "seed_mapping": {
+  "seed": 0,
+  "ticker_to_anon": {
+   "NVDA": "Stock 01",
+   "UNH": "Stock 02",
+   "AMZN": "Stock 03",
+   "PFE": "Stock 04",
+   "AAPL": "Stock 05",
+   "GOOGL": "Stock 06",
+   "XOM": "Stock 07",
+   "JPM": "Stock 08",
+   "WMT": "Stock 09",
+   "PG": "Stock 10",
+   "BAC": "Stock 11",
+   "JNJ": "Stock 12",
+   "KO": "Stock 13",
+   "CVX": "Stock 14",
+   "MSFT": "Stock 15"
+  }
+ },
+ "answers_real": [
+  {
+   "XOM": 0.6,
+   "JNJ": 0.1,
+   "KO": 0.2,
+   "CVX": 0.1
+  },
+  {
+   "XOM": 0.6,
+   "JNJ": 0.1,
+   "KO": 0.2,
+   "CVX": 0.1
+  },
+  {
+   "XOM": 0.5,
+   "JNJ": 0.2,
+   "KO": 0.2,
+   "CVX": 0.1
+  }
+ ],
+ "exposures": [
+  1.0,
+  1.0,
+  1.0
+ ],
+ "weight_std_mean": 0.023570226039551594,
+ "weight_range_max": 0.1,
+ "mean_weights_real": {
+  "CVX": 0.1,
+  "JNJ": 0.1333,
+  "KO": 0.2,
+  "XOM": 0.5667
+ }
+}

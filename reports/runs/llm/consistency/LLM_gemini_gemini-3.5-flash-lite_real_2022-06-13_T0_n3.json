@@ -1,0 +1,82 @@
+{
+ "n": 3,
+ "temperature": 0.0,
+ "n_distinct": 1,
+ "fraction_identical": 1.0,
+ "prompt_sha256": "888c34cf2c15e3b7f8b7a7a3f265eb2494d90815e8cb9548ac4e7bfaded30c2d",
+ "answers": [
+  {
+   "AAPL": 0.0,
+   "AMZN": 0.0,
+   "BAC": 0.0,
+   "CVX": 0.0,
+   "GOOGL": 0.0,
+   "JNJ": 0.0,
+   "JPM": 0.0,
+   "KO": 0.0,
+   "MSFT": 0.0,
+   "NVDA": 0.0,
+   "PFE": 0.0,
+   "PG": 0.0,
+   "UNH": 0.0,
+   "WMT": 0.0,
+   "XOM": 0.0
+  },
+  {
+   "AAPL": 0.0,
+   "AMZN": 0.0,
+   "BAC": 0.0,
+   "CVX": 0.0,
+   "GOOGL": 0.0,
+   "JNJ": 0.0,
+   "JPM": 0.0,
+   "KO": 0.0,
+   "MSFT": 0.0,
+   "NVDA": 0.0,
+   "PFE": 0.0,
+   "PG": 0.0,
+   "UNH": 0.0,
+   "WMT": 0.0,
+   "XOM": 0.0
+  },
+  {
+   "AAPL": 0.0,
+   "AMZN": 0.0,
+   "BAC": 0.0,
+   "CVX": 0.0,
+   "GOOGL": 0.0,
+   "JNJ": 0.0,
+   "JPM": 0.0,
+   "KO": 0.0,
+   "MSFT": 0.0,
+   "NVDA": 0.0,
+   "PFE": 0.0,
+   "PG": 0.0,
+   "UNH": 0.0,
+   "WMT": 0.0,
+   "XOM": 0.0
+  }
+ ],
+ "texts": [
+  "{\"weights\": {\"AAPL\": 0.0, \"MSFT\": 0.0, \"NVDA\": 0.0, \"AMZN\": 0.0, \"GOOGL\": 0.0, \"JPM\": 0.0, \"BAC\": 0.0, \"XOM\": 0.0, \"CVX\": 0.0, \"JNJ\": 0.0, \"PFE\": 0.0, \"UNH\": 0.0, \"PG\": 0.0, \"KO\": 0.0, \"WMT\": 0.0}, \"rationale\": \"Broad market downtrend with severe momentum deterioration across tech and cyclicals; holding 100% cash to preserve capital and avoid falling knives.\"}",
+  "{\"weights\": {\"AAPL\": 0.0, \"MSFT\": 0.0, \"NVDA\": 0.0, \"AMZN\": 0.0, \"GOOGL\": 0.0, \"JPM\": 0.0, \"BAC\": 0.0, \"XOM\": 0.0, \"CVX\": 0.0, \"JNJ\": 0.0, \"PFE\": 0.0, \"UNH\": 0.0, \"PG\": 0.0, \"KO\": 0.0, \"WMT\": 0.0}, \"rationale\": \"Severe market-wide downtrend with sharp weekly declines across all equities. Preserving capital in 100% cash to avoid catching falling knives amid negative momentum.\"}",
+  "{\"weights\": {\"AAPL\": 0.0, \"MSFT\": 0.0, \"NVDA\": 0.0, \"AMZN\": 0.0, \"GOOGL\": 0.0, \"JPM\": 0.0, \"BAC\": 0.0, \"XOM\": 0.0, \"CVX\": 0.0, \"JNJ\": 0.0, \"PFE\": 0.0, \"UNH\": 0.0, \"PG\": 0.0, \"KO\": 0.0, \"WMT\": 0.0}, \"rationale\": \"Broad market selloff and severe downward momentum across all sectors warrant maintaining 100% cash to preserve capital.\"}"
+ ],
+ "provider": "gemini",
+ "model": "gemini-3.5-flash-lite",
+ "mode": "real",
+ "date": "2022-06-13",
+ "bar_index": 1119,
+ "lookback": 60,
+ "seed_mapping": null,
+ "answers_real": [
+  {},
+  {},
+  {}
+ ],
+ "exposures": [
+  0,
+  0,
+  0
+ ]
+}

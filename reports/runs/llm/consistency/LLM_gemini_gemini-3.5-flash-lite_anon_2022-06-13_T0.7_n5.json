@@ -1,0 +1,174 @@
+{
+ "n": 5,
+ "temperature": 0.7,
+ "n_distinct": 5,
+ "fraction_identical": 0.2,
+ "prompt_sha256": "76fa47347eadec7ac470e9819b964026d2f7d6bf0cb379b8860841683374173e",
+ "answers": [
+  {
+   "Stock 01": 0.0,
+   "Stock 02": 0.0,
+   "Stock 03": 0.0,
+   "Stock 04": 0.0,
+   "Stock 05": 0.0,
+   "Stock 06": 0.0,
+   "Stock 07": 0.5,
+   "Stock 08": 0.0,
+   "Stock 09": 0.0,
+   "Stock 10": 0.0,
+   "Stock 11": 0.0,
+   "Stock 12": 0.1,
+   "Stock 13": 0.3,
+   "Stock 14": 0.1,
+   "Stock 15": 0.0
+  },
+  {
+   "Stock 01": 0.0,
+   "Stock 02": 0.0,
+   "Stock 03": 0.0,
+   "Stock 04": 0.0,
+   "Stock 05": 0.0,
+   "Stock 06": 0.0,
+   "Stock 07": 0.4,
+   "Stock 08": 0.0,
+   "Stock 09": 0.0,
+   "Stock 10": 0.0,
+   "Stock 11": 0.0,
+   "Stock 12": 0.2,
+   "Stock 13": 0.3,
+   "Stock 14": 0.1,
+   "Stock 15": 0.0
+  },
+  {
+   "Stock 01": 0.0,
+   "Stock 02": 0.0,
+   "Stock 03": 0.0,
+   "Stock 04": 0.0,
+   "Stock 05": 0.0,
+   "Stock 06": 0.0,
+   "Stock 07": 0.7,
+   "Stock 08": 0.0,
+   "Stock 09": 0.0,
+   "Stock 10": 0.0,
+   "Stock 11": 0.0,
+   "Stock 12": 0.1,
+   "Stock 13": 0.1,
+   "Stock 14": 0.1,
+   "Stock 15": 0.0
+  },
+  {
+   "Stock 01": 0.0,
+   "Stock 02": 0.0,
+   "Stock 03": 0.0,
+   "Stock 04": 0.0,
+   "Stock 05": 0.0,
+   "Stock 06": 0.0,
+   "Stock 07": 0.5,
+   "Stock 08": 0.0,
+   "Stock 09": 0.0,
+   "Stock 10": 0.0,
+   "Stock 11": 0.0,
+   "Stock 12": 0.2,
+   "Stock 13": 0.2,
+   "Stock 14": 0.1,
+   "Stock 15": 0.0
+  },
+  {
+   "Stock 01": 0.0,
+   "Stock 02": 0.0,
+   "Stock 03": 0.0,
+   "Stock 04": 0.0,
+   "Stock 05": 0.0,
+   "Stock 06": 0.0,
+   "Stock 07": 0.45,
+   "Stock 08": 0.0,
+   "Stock 09": 0.0,
+   "Stock 10": 0.0,
+   "Stock 11": 0.0,
+   "Stock 12": 0.15,
+   "Stock 13": 0.25,
+   "Stock 14": 0.15,
+   "Stock 15": 0.0
+  }
+ ],
+ "texts": [
+  "{\"weights\": {\"Stock 01\": 0.0, \"Stock 02\": 0.0, \"Stock 03\": 0.0, \"Stock 04\": 0.0, \"Stock 05\": 0.0, \"Stock 06\": 0.0, \"Stock 07\": 0.5, \"Stock 08\": 0.0, \"Stock 09\": 0.0, \"Stock 10\": 0.0, \"Stock 11\": 0.0, \"Stock 12\": 0.1, \"Stock 13\": 0.3, \"Stock 14\": 0.1, \"Stock 15\": 0.0}, \"rationale\": \"Allocate to top momentum and positive medium-term trend leaders (Stock 07, 13, 14, 12) while avoiding broad market drawdown.\"}",
+  "{\"weights\": {\"Stock 01\": 0.0, \"Stock 02\": 0.0, \"Stock 03\": 0.0, \"Stock 04\": 0.0, \"Stock 05\": 0.0, \"Stock 06\": 0.0, \"Stock 07\": 0.4, \"Stock 08\": 0.0, \"Stock 09\": 0.0, \"Stock 10\": 0.0, \"Stock 11\": 0.0, \"Stock 12\": 0.2, \"Stock 13\": 0.3, \"Stock 14\": 0.1, \"Stock 15\": 0.0}, \"rationale\": \"Allocate to top-performing momentum stocks with positive mid-to-long-term trends, maintaining remaining capital in cash to mitigate recent broad market drawdown.\"}",
+  "{\"weights\": {\"Stock 01\": 0.0, \"Stock 02\": 0.0, \"Stock 03\": 0.0, \"Stock 04\": 0.0, \"Stock 05\": 0.0, \"Stock 06\": 0.0, \"Stock 07\": 0.7, \"Stock 08\": 0.0, \"Stock 09\": 0.0, \"Stock 10\": 0.0, \"Stock 11\": 0.0, \"Stock 12\": 0.1, \"Stock 13\": 0.1, \"Stock 14\": 0.1, \"Stock 15\": 0.0}, \"rationale\": \"Prioritizing top momentum leaders with strong multi-month relative strength (Stock 07, 14, 13, 12) while holding remaining exposure in cash amid broad market weakness.\"}",
+  "{\"weights\": {\"Stock 01\": 0.0, \"Stock 02\": 0.0, \"Stock 03\": 0.0, \"Stock 04\": 0.0, \"Stock 05\": 0.0, \"Stock 06\": 0.0, \"Stock 07\": 0.5, \"Stock 08\": 0.0, \"Stock 09\": 0.0, \"Stock 10\": 0.0, \"Stock 11\": 0.0, \"Stock 12\": 0.2, \"Stock 13\": 0.2, \"Stock 14\": 0.1, \"Stock 15\": 0.0}, \"rationale\": \"Allocate to strong medium-term and 6-month momentum leaders (Stock 07, 13, 14, 12) while avoiding broad market drawdown.\"}",
+  "{\"weights\": {\"Stock 01\": 0.0, \"Stock 02\": 0.0, \"Stock 03\": 0.0, \"Stock 04\": 0.0, \"Stock 05\": 0.0, \"Stock 06\": 0.0, \"Stock 07\": 0.45, \"Stock 08\": 0.0, \"Stock 09\": 0.0, \"Stock 10\": 0.0, \"Stock 11\": 0.0, \"Stock 12\": 0.15, \"Stock 13\": 0.25, \"Stock 14\": 0.15, \"Stock 15\": 0.0}, \"rationale\": \"Allocate to strong medium-term momentum leaders exhibiting positive multi-month performance while avoiding broad market drawdown.\"}"
+ ],
+ "provider": "gemini",
+ "model": "gemini-3.5-flash-lite",
+ "mode": "anon",
+ "date": "2022-06-13",
+ "bar_index": 1119,
+ "lookback": 60,
+ "seed_mapping": {
+  "seed": 0,
+  "ticker_to_anon": {
+   "NVDA": "Stock 01",
+   "UNH": "Stock 02",
+   "AMZN": "Stock 03",
+   "PFE": "Stock 04",
+   "AAPL": "Stock 05",
+   "GOOGL": "Stock 06",
+   "XOM": "Stock 07",
+   "JPM": "Stock 08",
+   "WMT": "Stock 09",
+   "PG": "Stock 10",
+   "BAC": "Stock 11",
+   "JNJ": "Stock 12",
+   "KO": "Stock 13",
+   "CVX": "Stock 14",
+   "MSFT": "Stock 15"
+  }
+ },
+ "answers_real": [
+  {
+   "XOM": 0.5,
+   "JNJ": 0.1,
+   "KO": 0.3,
+   "CVX": 0.1
+  },
+  {
+   "XOM": 0.4,
+   "JNJ": 0.2,
+   "KO": 0.3,
+   "CVX": 0.1
+  },
+  {
+   "XOM": 0.7,
+   "JNJ": 0.1,
+   "KO": 0.1,
+   "CVX": 0.1
+  },
+  {
+   "XOM": 0.5,
+   "JNJ": 0.2,
+   "KO": 0.2,
+   "CVX": 0.1
+  },
+  {
+   "XOM": 0.45,
+   "JNJ": 0.15,
+   "KO": 0.25,
+   "CVX": 0.15
+  }
+ ],
+ "exposures": [
+  1.0,
+  1.0,
+  1.0,
+  1.0,
+  1.0
+ ],
+ "weight_std_mean": 0.06038372438933258,
+ "weight_range_max": 0.29999999999999993,
+ "mean_weights_real": {
+  "CVX": 0.11,
+  "JNJ": 0.15,
+  "KO": 0.23,
+  "XOM": 0.51
+ }
+}

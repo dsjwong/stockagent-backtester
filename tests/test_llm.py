@@ -338,3 +338,99 @@ def test_token_estimate_runs():
     run_llm.estimate(args)                            # prints; must not raise or call a provider
     txt = build_prompt(load_market().close.iloc[:300], {"equity": 1e6, "cash": 1e6}, "anon").text
     assert 800 < approx_tokens(txt) < 2500
+
+
+# ----------------------------------------------------------------------------- M4b: result round-trip + gemini adapter (offline)
+
+def test_result_load_round_trips_metrics(cache, tmp_path):
+    from sab.engine import BacktestResult
+    from sab.metrics.metrics import compute_metrics
+    m = rw_market(200, seed=5)
+    a = LLMAgent("mock", "mock", "anon", tickers=TICKS, cache=cache)
+    r = run_backtest(a, m, BacktestConfig(rebalance="weekly", warmup=a.warmup))
+    back = BacktestResult.load(r.save(tmp_path, name="agent"))
+    assert back.name == r.name and len(back.trades) == len(r.trades)
+    mb, mr = compute_metrics(back), compute_metrics(r)
+    assert all(mb[k] == pytest.approx(mr[k]) for k in ("CAGR", "Sharpe", "MaxDD", "Turnover", "Costs", "WinRate", "Trades"))
+    assert back.decisions["weights"].iloc[0] == r.decisions["weights"].iloc[0]     # dict cells restored
+
+
+class _Resp:
+    def __init__(self, status, body, headers=None):
+        self.status_code, self._body, self.headers, self.text = status, body, headers or {}, json.dumps(body)
+
+    def json(self):
+        return self._body
+
+
+def _gemini_ok(text):
+    return _Resp(200, {"candidates": [{"content": {"parts": [{"text": "thinking...", "thought": True}, {"text": text}]}, "finishReason": "STOP"}],
+                       "usageMetadata": {"promptTokenCount": 10, "candidatesTokenCount": 5, "thoughtsTokenCount": 3}, "modelVersion": "gemini-x"})
+
+
+def _gemini_429(quota_id, delay="1s"):
+    return _Resp(429, {"error": {"code": 429, "message": "You exceeded your current quota", "details": [
+        {"violations": [{"quotaId": quota_id, "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests"}]},
+        {"retryDelay": delay}]}})
+
+
+@pytest.fixture
+def gemini_env(monkeypatch):
+    import requests
+    from sab.llm import providers as P
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key-not-real")
+    monkeypatch.setenv("SAB_GEMINI_MIN_INTERVAL", "0")
+    monkeypatch.setenv("SAB_GEMINI_MAX_RETRIES", "2")
+    monkeypatch.setattr(P.time, "sleep", lambda s: None)          # no real waiting in tests
+    calls = []
+
+    def install(responses):
+        it = iter(responses)
+
+        def fake_post(url, headers=None, json=None, timeout=None):
+            calls.append({"url": url, "body": json, "key": headers.get("x-goog-api-key")})
+            r = next(it)
+            if isinstance(r, Exception):
+                raise r
+            return r
+        monkeypatch.setattr(requests, "post", fake_post)
+        return calls
+    return install
+
+
+def test_gemini_adapter_parses_non_thought_parts_and_sends_config(gemini_env, cache):
+    calls = gemini_env([_gemini_ok('{"weights": {}, "rationale": "x"}')])
+    r = complete("gemini", "gemini-test", "Tickers: A, B\nhello", temperature=0.0, seed=0, cache=cache)
+    assert r.text == '{"weights": {}, "rationale": "x"}' and r.usage["prompt_tokens"] == 10 and r.usage["thought_tokens"] == 3
+    assert r.model == "gemini-x" and not r.cached
+    body = calls[0]["body"]
+    assert calls[0]["url"].endswith("/models/gemini-test:generateContent") and calls[0]["key"] == "test-key-not-real"
+    assert body["generationConfig"]["temperature"] == 0.0 and body["generationConfig"]["seed"] == 0
+    assert body["generationConfig"]["thinkingConfig"] == {"thinkingLevel": "minimal"}
+    assert complete("gemini", "gemini-test", "Tickers: A, B\nhello", temperature=0.0, seed=0, cache=cache).cached   # second time from cache
+    assert len(calls) == 1
+
+
+def test_gemini_adapter_backs_off_on_per_minute_429_then_succeeds(gemini_env, cache):
+    calls = gemini_env([_gemini_429("GenerateRequestsPerMinutePerProjectPerModel-FreeTier"), _gemini_ok("ok")])
+    r = complete("gemini", "gemini-test", "Tickers: A\np", cache=cache)
+    assert r.text == "ok" and len(calls) == 2
+
+
+def test_gemini_adapter_stops_immediately_on_daily_quota(gemini_env, cache):
+    from sab.llm.providers import QuotaExhausted
+    calls = gemini_env([_gemini_429("GenerateRequestsPerDayPerProjectPerModel-FreeTier", "52s"), _gemini_ok("never")])
+    with pytest.raises(QuotaExhausted) as e:
+        complete("gemini", "gemini-test", "Tickers: A\np", cache=cache)
+    assert "PerDay" in str(e.value) and len(calls) == 1 and len(cache) == 0
+
+
+def test_gemini_adapter_gives_up_after_max_retries_and_retries_network_errors(gemini_env, cache):
+    import requests
+    from sab.llm.providers import QuotaExhausted
+    calls = gemini_env([_gemini_429("PerMinute")] * 3 + [_gemini_ok("late")])
+    with pytest.raises(QuotaExhausted):
+        complete("gemini", "gemini-test", "Tickers: A\np", cache=cache)
+    assert len(calls) == 3                                               # 1 + SAB_GEMINI_MAX_RETRIES
+    calls = gemini_env([requests.exceptions.ConnectionError("proxy"), _gemini_ok("recovered")])
+    assert complete("gemini", "gemini-test", "Tickers: A\nq", cache=cache).text == "recovered"
