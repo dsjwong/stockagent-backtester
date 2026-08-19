@@ -15,7 +15,7 @@ hindsight, which is why that line is reported but not trusted.
 
 | strategy | rebal | 2021 CAGR | 2021 Sharpe | 2021 MaxDD | 2022 CAGR | 2022 Sharpe | 2022 MaxDD | turnover/yr | full 2019-26 CAGR / Sharpe |
 |---|---|---|---|---|---|---|---|---|---|
-| **LLM gemini-3.5-flash-lite, anon** (weekly, T=0) | weekly | 41.5% | 2.29 | -7.4% | **1.6%** | 0.18 | -21.6% | 8.6-9.3 | not run yet (see below) |
+| **LLM gemini-3.5-flash-lite, anon** (weekly, T=0) | weekly | 41.5% | 2.29 | -7.4% | **1.6%** | 0.18 | -21.6% | 8.6-9.3 | incomplete: 253/397 decisions cached (resume, see reports/M4-llm-results.md) |
 | LLM gemini-3.5-flash-lite, **real** names/dates | weekly | 32.9% | 2.37 | -6.0% | 12.0% | 0.70 | -15.5% | 4.4-4.5 | -- |
 | MeanRev (20d z < -1, EW) | weekly | 19.3% | 1.18 | -6.5% | -18.2% | -0.56 | -27.4% | 27.5 | 2.5% / 0.22 |
 | Trend (SMA50>SMA200, EW among trenders) | weekly | 40.8% | 2.81 | -4.1% | -3.3% | -0.08 | -17.1% | 2.6 | 21.6% / 1.18 |

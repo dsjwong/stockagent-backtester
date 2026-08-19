@@ -1,0 +1,28 @@
+{
+ "provider": "gemini",
+ "model": "gemini-3.5-flash-lite",
+ "temperature": 0.0,
+ "seed": 0,
+ "prompt": "You are a portfolio manager deciding target weights for a long-only stock portfolio.\nRules: weights are fractions of total equity, each in [0, 1], the sum must be <= 1; whatever is not allocated stays in cash. No shorting, no leverage. Orders fill at the next open and cost about 0.15% per side, so do not churn without reason. Decide from the data below only.\nToday: Day 468\nTickers: Stock 01, Stock 02, Stock 03, Stock 04, Stock 05, Stock 06, Stock 07, Stock 08, Stock 09, Stock 10, Stock 11, Stock 12, Stock 13, Stock 14, Stock 15\n\nRecent closes (last 10 bars daily, then every 5 bars, oldest first). Prices rebased to 100 at Day 409; identities are hidden on purpose.\nday | Stock 01 | Stock 02 | Stock 03 | Stock 04 | Stock 05 | Stock 06 | Stock 07 | Stock 08 | Stock 09 | Stock 10 | Stock 11 | Stock 12 | Stock 13 | Stock 14 | Stock 15\nDay 409 | 100.00 | 100.00 | 100.00 | 100.00 | 100.00 | 100.00 | 100.00 | 100.00 | 100.00 | 100.00 | 100.00 | 100.00 | 100.00 | 100.00 | 100.00\nDay 414 | 94.30 | 92.97 | 94.12 | 94.96 | 91.76 | 93.49 | 92.93 | 96.14 | 98.67 | 97.75 | 93.92 | 97.81 | 97.83 | 95.12 | 92.45\nDay 419 | 95.45 | 91.41 | 91.53 | 95.54 | 91.96 | 91.28 | 88.84 | 88.40 | 98.30 | 94.78 | 84.28 | 93.86 | 93.28 | 87.75 | 93.48\nDay 424 | 84.75 | 91.52 | 84.34 | 92.47 | 81.91 | 80.05 | 69.02 | 67.98 | 99.38 | 92.01 | 63.33 | 91.46 | 86.51 | 73.28 | 81.48\nDay 429 | 67.81 | 75.65 | 79.12 | 82.66 | 74.54 | 70.65 | 56.87 | 64.28 | 90.56 | 86.02 | 59.03 | 85.22 | 76.16 | 63.32 | 73.26\nDay 434 | 73.44 | 65.50 | 89.13 | 78.03 | 69.05 | 69.41 | 51.85 | 57.49 | 97.37 | 77.45 | 52.21 | 74.50 | 63.20 | 49.26 | 73.56\nDay 439 | 91.70 | 84.47 | 91.99 | 89.48 | 78.42 | 75.48 | 61.83 | 68.02 | 98.14 | 91.17 | 63.65 | 89.16 | 75.72 | 65.36 | 86.68\nDay 444 | 92.67 | 83.48 | 93.57 | 94.69 | 80.77 | 77.91 | 66.73 | 65.76 | 107.41 | 93.40 | 61.77 | 93.69 | 78.53 | 73.03 | 89.41\nDay 449 | 98.04 | 90.93 | 106.95 | 99.81 | 88.34 | 83.31 | 69.96 | 70.20 | 109.91 | 95.89 | 68.53 | 97.89 | 82.32 | 76.86 | 93.97\nDay 454 | 93.06 | 92.17 | 109.05 | 97.56 | 82.59 | 79.81 | 67.54 | 65.46 | 110.09 | 94.88 | 62.49 | 100.34 | 76.36 | 74.16 | 90.79\nDay 459 | 100.60 | 96.93 | 108.39 | 103.83 | 85.73 | 81.16 | 74.15 | 70.04 | 109.06 | 93.28 | 68.99 | 101.48 | 78.65 | 81.68 | 91.87\nDay 460 | 103.05 | 96.69 | 111.14 | 104.41 | 88.55 | 88.38 | 78.25 | 71.93 | 105.31 | 93.44 | 71.56 | 100.71 | 79.29 | 85.96 | 95.99\nDay 461 | 100.92 | 98.31 | 115.89 | 105.07 | 90.41 | 88.67 | 76.62 | 70.39 | 103.56 | 94.07 | 69.45 | 100.58 | 77.22 | 83.58 | 96.95\nDay 462 | 97.64 | 95.64 | 107.08 | 103.10 | 88.96 | 86.74 | 71.13 | 68.54 | 104.73 | 93.23 | 66.65 | 99.40 | 76.73 | 81.25 | 94.44\nDay 463 | 100.58 | 96.65 | 108.48 | 103.04 | 90.22 | 87.11 | 74.00 | 67.73 | 105.39 | 92.39 | 66.22 | 99.39 | 75.96 | 83.07 | 96.75\nDay 464 | 101.42 | 98.50 | 108.57 | 105.48 | 91.57 | 88.83 | 73.92 | 67.62 | 106.27 | 92.58 | 65.44 | 100.22 | 76.39 | 84.38 | 97.79\nDay 465 | 102.82 | 97.07 | 110.14 | 105.48 | 92.52 | 88.59 | 72.53 | 66.35 | 105.05 | 90.26 | 64.54 | 99.26 | 75.30 | 81.80 | 98.75\nDay 466 | 105.27 | 95.80 | 110.90 | 102.24 | 93.47 | 90.16 | 72.94 | 67.04 | 104.31 | 89.52 | 65.96 | 98.94 | 75.05 | 84.16 | 99.33\nDay 467 | 107.90 | 96.47 | 111.46 | 102.96 | 95.70 | 91.15 | 76.14 | 68.14 | 105.21 | 92.53 | 68.06 | 99.68 | 77.59 | 86.73 | 99.91\nDay 468 | 111.40 | 97.04 | 112.84 | 105.39 | 97.20 | 92.42 | 75.42 | 66.13 | 105.83 | 92.02 | 65.21 | 99.95 | 76.63 | 84.82 | 101.03\n\nTrailing returns:\nticker | 1w | 1m | 3m | 6m\nStock 01 | +10.8% | +22.7% | +22.8% | +55.1%\nStock 02 | +0.4% | +9.3% | +1.0% | +13.5%\nStock 03 | +4.0% | +17.9% | +12.9% | +34.7%\nStock 04 | +2.3% | +8.7% | +1.8% | +5.3%\nStock 05 | +7.7% | +17.9% | -1.8% | +22.0%\nStock 06 | +6.1% | +16.3% | -7.0% | +7.4%\nStock 07 | +1.9% | +6.1% | -23.7% | -35.7%\nStock 08 | -2.4% | -12.4% | -34.0% | -29.6%\nStock 09 | +0.4% | +2.0% | +8.3% | +4.2%\nStock 10 | -0.4% | +1.2% | -8.0% | -2.4%\nStock 11 | -1.5% | -9.2% | -34.5% | -31.2%\nStock 12 | +0.6% | +5.6% | -1.2% | +15.0%\nStock 13 | +0.9% | -7.1% | -23.1% | -11.5%\nStock 14 | +2.1% | +10.7% | -14.0% | -21.7%\nStock 15 | +4.4% | +13.1% | -0.8% | +30.2%\n\nPortfolio:\nCurrent weights: Stock 01 34.2%, Stock 03 32.3%, Stock 05 3.0%, Stock 09 29.5%\nCash: 0.9% of equity\nEquity vs start: +33.1%\n\nRespond with ONLY a JSON object, no prose before or after, exactly of the form\n{\"weights\": {\"<ticker>\": <fraction>, ...}, \"rationale\": \"<= 40 words\"}\nusing only these tickers (Stock 01, Stock 02, Stock 03, Stock 04, Stock 05, Stock 06, Stock 07, Stock 08, Stock 09, Stock 10, Stock 11, Stock 12, Stock 13, Stock 14, Stock 15). Omitted tickers get weight 0. Example shape: {\"weights\": {\"Stock 01\": 0.0, \"Stock 02\": 0.0}, \"rationale\": \"...\"}",
+ "response": {
+  "text": "{\"weights\": {\"Stock 01\": 0.35, \"Stock 03\": 0.35, \"Stock 05\": 0.05, \"Stock 09\": 0.25}, \"rationale\": \"Maintain momentum leaders Stock 01 and Stock 03 with strong 1w/1m gains, slightly reallocate from Stock 09 to Stock 05 for better trend persistence while minimizing turnover costs.\"}",
+  "usage": {
+   "prompt_tokens": 3296,
+   "completion_tokens": 101,
+   "thought_tokens": 0,
+   "finish_reason": "STOP"
+  },
+  "model": "gemini-3.5-flash-lite",
+  "latency_s": 4.618000499991467,
+  "provider": "gemini",
+  "cached": false
+ },
+ "usage": {
+  "prompt_tokens": 3296,
+  "completion_tokens": 101,
+  "thought_tokens": 0,
+  "finish_reason": "STOP"
+ },
+ "key": "82f9eeafaa1c3ee822adc552967a0e1738ec6fc215ef11235acd62977a52d698",
+ "timestamp": "2026-08-19T18:51:49+0800"
+}
