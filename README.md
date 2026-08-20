@@ -3,6 +3,12 @@
 > **Read the 2-minute story: [`docs/leakage-writeup.md`](docs/leakage-writeup.md)** — what happens when you give an
 > LLM real ticker names and dates, and why the anonymised (negative) result is the one to trust.
 
+![Four figures from the leakage write-up: the 2022 real-vs-anonymised gap, the same prompt drawn eight times per mode, the full-period bottom line, and the classical strategies 2019-2026](docs/img/demo.gif)
+
+*The whole argument in four figures: the 2022 real-vs-anonymised gap · the same prompt drawn 8 times per mode · the
+after-costs bottom line · the classical baselines it is measured against. Sources:
+[`docs/leakage-writeup.md`](docs/leakage-writeup.md), [`reports/M3-results.md`](reports/M3-results.md).*
+
 Real-data, no-lookahead backtesting of LLM trading agents against classical strategies and buy-and-hold, with
 transaction costs. The LLM agent comes from [StockAgent](https://arxiv.org/abs/2407.18957) (a multi-agent
 LLM market simulation on synthetic prices); this repo replays it on 15 real US large-caps (2019-2026), caches every
