@@ -1,5 +1,8 @@
 # StockAgent Backtester
 
+> **Read the 2-minute story: [`docs/leakage-writeup.md`](docs/leakage-writeup.md)** — what happens when you give an
+> LLM real ticker names and dates, and why the anonymised (negative) result is the one to trust.
+
 Real-data, no-lookahead backtesting of LLM trading agents against classical strategies and buy-and-hold, with
 transaction costs. The LLM agent comes from [StockAgent](https://arxiv.org/abs/2407.18957) (a multi-agent
 LLM market simulation on synthetic prices); this repo replays it on 15 real US large-caps (2019-2026), caches every
@@ -15,7 +18,7 @@ hindsight, which is why that line is reported but not trusted.
 
 | strategy | rebal | 2021 CAGR | 2021 Sharpe | 2021 MaxDD | 2022 CAGR | 2022 Sharpe | 2022 MaxDD | turnover/yr | full 2019-26 CAGR / Sharpe |
 |---|---|---|---|---|---|---|---|---|---|
-| **LLM gemini-3.5-flash-lite, anon** (weekly, T=0) | weekly | 41.5% | 2.29 | -7.4% | **1.6%** | 0.18 | -21.6% | 8.6-9.3 | incomplete: 253/397 decisions cached (resume, see reports/M4-llm-results.md) |
+| **LLM gemini-3.5-flash-lite, anon** (weekly, T=0) | weekly | 41.5% | 2.29 | -7.4% | **1.6%** | 0.18 | -21.6% | 8.6-9.4 | **20.4% / 1.04** (398 decisions, -25.0% MaxDD, $605k costs) |
 | LLM gemini-3.5-flash-lite, **real** names/dates | weekly | 32.9% | 2.37 | -6.0% | 12.0% | 0.70 | -15.5% | 4.4-4.5 | -- |
 | MeanRev (20d z < -1, EW) | weekly | 19.3% | 1.18 | -6.5% | -18.2% | -0.56 | -27.4% | 27.5 | 2.5% / 0.22 |
 | Trend (SMA50>SMA200, EW among trenders) | weekly | 40.8% | 2.81 | -4.1% | -3.3% | -0.08 | -17.1% | 2.6 | 21.6% / 1.18 |
@@ -81,6 +84,7 @@ python3 -m venv .venv && .venv/bin/pip install -e '.[dev]'                 # Pyt
 .venv/bin/python scripts/run_classical.py                                  # M3 tables + figures from the committed snapshot (~1 min)
 .venv/bin/python scripts/run_llm.py --provider gemini --model gemini-3.5-flash-lite --mode anon --period 2022   # 0 API calls: served from the committed cache
 .venv/bin/python scripts/report_llm.py                                     # rebuilds reports/M4-llm-results.md + reports/fig/llm_*.png
+.venv/bin/python scripts/fig_leakage.py                                    # rebuilds the docs/leakage-writeup.md figures + its two tables
 ```
 
 New model or period: put `GOOGLE_API_KEY` (or `ANTHROPIC_API_KEY` / `OPENAI_API_KEY`; `pip install -e '.[llm]'` for those SDKs)
@@ -97,10 +101,10 @@ src/sab/engine/      MarketData, Context (point-in-time view), broker (next-open
 src/sab/metrics/     CAGR/Sharpe/Sortino/MaxDD/turnover/... + summary_table
 src/sab/strategies/  EqualWeight, SpyReference, MeanReversion, TrendFollowing, WeightedTrend, MomentumTopK
 src/sab/llm/         prompt builder + no-future audit, disk cache, providers (gemini REST, anthropic, openai, ollama, 3 mocks), parser, LLMAgent, consistency_check
-scripts/             run_benchmark.py (M2), run_classical.py (M3), run_llm.py (M4), report_llm.py (M5)
+scripts/             run_benchmark.py (M2), run_classical.py (M3), run_llm.py (M4), report_llm.py (M5), fig_leakage.py (writeup figures)
 reports/             M2-benchmark.md, M3-results.md, M4-llm-results.md, fig/, runs/<period>/<cost>/<strategy>/ (equity/weights/trades/decisions parquet + config)
 data/                snapshots (committed), llm_cache/ (committed prompt -> response)
-docs/decisions.md    numbered design decisions (#1-#29) with the reasoning; docs/stockagent-reuse-assessment.md
+docs/                leakage-writeup.md (the 2-minute story), linkedin-draft.md, decisions.md (#1-#29), stockagent-reuse-assessment.md
 tests/               107 offline tests
 ```
 

@@ -380,19 +380,19 @@ INTERPRETATION.update({
         "shows its decisions use knowledge that is not in the prompt; treat it as contaminated. "
         "7. Engineering-wise the pipeline held up: 208 decisions, 0 parse failures, 0 retries, 0 fallbacks, 1 unknown name dropped, "
         "no renormalisations; the model omits some tickers in 15-35 of 52 answers (allowed by the spec, counted anyway). "
-        "8. What would change the conclusion: more seeds/years (the 2019-2026 anon run is in progress, see below), a second model, and "
+        "8. What would change the conclusion: more seeds/years, a second model, and "
         "a prompt that does not hand the model trailing returns -- the current prompt makes \"momentum\" the path of least resistance.\n"
     ),
     "cost_tail": (
         "$0 on the free tier; plus 16 uncached consistency calls and ~25 probe/partial calls (17 cached decisions of a `gemini-3.6-flash` "
         "2022-anon run that is resumable at 20 requests/day). Each run took 6-20 minutes wall-clock at the paced ~13 requests/min "
         "(latency column includes 429 backoff waits). Re-running any table here costs nothing: the cache is committed.\n\n"
-        "**Not done / how to resume.** Full-period 2019-2026 anon run (~397 calls) exceeds one free-tier day: 253 of its decisions "
-        "(2019-01-02 .. 2023-10-30) are cached, the rest stopped on the daily 500-request cap; re-run "
-        "`.venv/bin/python scripts/run_llm.py --provider gemini --model gemini-3.5-flash-lite --mode anon --period full --verbose` "
-        "after the daily quota resets (midnight Pacific = 15:00 HKT) until it exits 0 -- completed decisions come from the cache -- "
-        "then `.venv/bin/python scripts/report_llm.py` to add the period here. Same command with `--period full --mode real`, or "
-        "`--model gemini-3.6-flash --period 2022` (20 calls/day), extends the comparison."
+        "**Not done / how to extend.** The full-period 2019-2026 anon run needed two free-tier days (~397 calls against a 500/day "
+        "cap) and is complete and cached. Not run: full-period **real** mode "
+        "(`.venv/bin/python scripts/run_llm.py --provider gemini --model gemini-3.5-flash-lite --mode real --period full --verbose`) "
+        "and a second model (`--model gemini-3.6-flash --period 2022`, 20 calls/day, 17 decisions already cached). Either exits 2 "
+        "with a resume hint if the daily quota runs out; re-running the same command resumes from the cache, then "
+        "`.venv/bin/python scripts/report_llm.py` adds the period here."
     ),
 })
 
