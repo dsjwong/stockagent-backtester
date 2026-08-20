@@ -1,0 +1,49 @@
+{
+ "period": "full (2019-01 .. 2026-08)",
+ "costs": {
+  "commission_bps": 10.0,
+  "slippage_bps": 5.0
+ },
+ "agent": {
+  "provider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "mode": "anon",
+  "lookback": 60,
+  "temperature": 0.0,
+  "seed": 0,
+  "max_tokens": 400,
+  "rebalance": "weekly",
+  "warmup": 127,
+  "max_retries": 1,
+  "anon_mapping": {
+   "seed": 0,
+   "ticker_to_anon": {
+    "NVDA": "Stock 01",
+    "UNH": "Stock 02",
+    "AMZN": "Stock 03",
+    "PFE": "Stock 04",
+    "AAPL": "Stock 05",
+    "GOOGL": "Stock 06",
+    "XOM": "Stock 07",
+    "JPM": "Stock 08",
+    "WMT": "Stock 09",
+    "PG": "Stock 10",
+    "BAC": "Stock 11",
+    "JNJ": "Stock 12",
+    "KO": "Stock 13",
+    "CVX": "Stock 14",
+    "MSFT": "Stock 15"
+   }
+  }
+ },
+ "n_decisions": 398,
+ "n_model_calls": 399,
+ "n_provider_calls_this_run": 146,
+ "cache_hits": 253,
+ "prompt_tokens": 1374458,
+ "completion_tokens": 63555,
+ "retries": 1,
+ "fallbacks": 0,
+ "repairs": 2116,
+ "mean_exposure": 0.9611809045226131
+}

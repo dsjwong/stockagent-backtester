@@ -1,0 +1,16 @@
+{
+  "name": "SPY",
+  "initial_cash": 1000000.0,
+  "rebalance": "monthly",
+  "warmup": 0,
+  "commission_bps": 10.0,
+  "slippage_bps": 5.0,
+  "strategy": "SPY",
+  "params": {},
+  "start": "2019-01-02",
+  "end": "2026-08-14",
+  "n_bars": 1915,
+  "n_scaled_down": 0,
+  "n_sell_capped": 0,
+  "period_start": "2019-01-02"
+}

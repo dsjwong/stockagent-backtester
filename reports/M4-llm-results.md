@@ -138,6 +138,58 @@ Top: growth of $1 with costs (LLM agents bold; `[no costs]` rows in the table re
 - daily return correlation of the two equity curves: 0.88
 - top-5 average weights, real: {'MSFT': 0.102, 'GOOGL': 0.093, 'UNH': 0.088, 'NVDA': 0.074, 'AAPL': 0.072}; anon: {'GOOGL': 0.133, 'NVDA': 0.12, 'XOM': 0.112, 'BAC': 0.109, 'MSFT': 0.082}
 
+## full (2019-01 .. 2026-08)
+
+![equity full (2019-01 .. 2026-08)](fig/llm_full.png)
+
+Top: growth of $1 with costs (LLM agents bold; `[no costs]` rows in the table replay the same logged weights at zero cost). Bottom: LLM target exposure (sum of weights) over time.
+
+### Metrics (costs 10+5 bps/side unless marked, rf = 0)
+
+| strategy (rf=0) | CAGR | TotalRet | Vol | Sharpe | Sortino | MaxDD | DD_days | Calmar | Turnover | Exposure | WinRate | Trades | Costs | Costs_bps |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| LLM(gemini/gemini-3.5-flash-lite, anon) | 20.4% | 310.9% | 19.9% | 1.04 | 1.49 | -25.0% | 393 | 0.82 | 9.36 | 95.8% | 70.1% | 2635 | 605,495 | 6055 |
+| LLM(gemini/gemini-3.5-flash-lite, anon) [no costs] | 23.9% | 409.3% | 19.9% | 1.18 | 1.70 | -22.9% | 345 | 1.04 | 9.37 | 95.9% | 70.5% | 2638 | 0 | 0 |
+| EW-rebal (monthly) | 22.7% | 374.2% | 18.1% | 1.23 | 1.76 | -31.2% | 294 | 0.73 | 0.36 | 99.6% | 93.8% | 1373 | 18,088 | 181 |
+| EW-hold | 31.4% | 694.7% | 24.9% | 1.22 | 1.79 | -30.7% | 354 | 1.02 | 0.07 | 99.9% |  | 15 | 1,497 | 15 |
+| SPY (reference) | 17.9% | 249.1% | 19.4% | 0.95 | 1.34 | -33.7% | 488 | 0.53 | 0.07 | 99.9% |  | 1 | 1,498 | 15 |
+| Trend(SMA50>SMA200) | 21.6% | 340.3% | 17.9% | 1.18 | 1.70 | -28.3% | 291 | 0.76 | 2.57 | 99.6% | 87.3% | 4250 | 135,699 | 1357 |
+| Trend(SMA50>SMA200), 1/N slots | 14.6% | 182.2% | 12.8% | 1.13 | 1.61 | -23.7% | 302 | 0.62 | 1.18 | 70.4% | 89.1% | 4220 | 48,009 | 480 |
+| WeightedTrend(21/63/126/252) | 26.8% | 508.0% | 21.6% | 1.21 | 1.76 | -28.6% | 192 | 0.94 | 2.45 | 98.2% | 70.6% | 1121 | 168,788 | 1688 |
+| MeanRev(N=20,z<-1) | 2.5% | 20.7% | 21.9% | 0.22 | 0.31 | -35.9% | 1150 | 0.07 | 27.53 | 77.3% | 50.0% | 1866 | 684,263 | 6843 |
+
+### LLM decision statistics
+
+|  | LLM(gemini/gemini-3.5-flash-lite, anon) |
+|---|---|
+| decisions | 398 |
+| model calls | 399 |
+| cache hits (this run) | 253 |
+| prompt tokens | 1374458 |
+| completion tokens | 63555 |
+| mean exposure | 0.961 |
+| min exposure | 0.000 |
+| max exposure | 1.000 |
+| mean names held | 5.734 |
+| turnover/yr | 9.363 |
+| retries | 1 |
+| fallbacks | 0 |
+| decisions with a spec repair | 4 |
+|   of which only formatting (fence/comma) | 0 |
+| renormalised (sum>1) | 2 |
+| unknown names dropped | 2 |
+| decisions omitting some tickers (-> 0) | 233 |
+| mean latency (s) | 4.588 |
+| turnover/yr (no-cost replay) | 9.368 |
+| CAGR with / without costs | 20.4% / 23.9% |
+
+**Sample rationales, LLM(gemini/gemini-3.5-flash-lite, anon)** (verbatim, evenly spaced through the year):
+
+- 2019-01-02 (exposure 1.00, 5 names): "Allocate to top-performing stocks with positive 6m momentum and stable recent returns, minimizing churn while maintaining cash buffer."
+- 2021-07-12 (exposure 1.00, 5 names): "Maintain strong momentum leaders (Stock 01, 03, 05, 06, 15) with minimal turnover to avoid friction costs."
+- 2024-01-29 (exposure 1.00, 4 names): "Maintain momentum leaders with strong multi-month uptrends and minimal turnover costs."
+- 2026-08-10 (exposure 1.00, 8 names): "Reallocate from stagnant holdings into strong momentum leaders (Stock 11, 08, 15, 04) with superior 3m/6m profiles, minimizing turnover while upgrading trend quality."
+
 ## Consistency check (same prompt, repeated calls, cache bypassed)
 
 | agent | date | T | n | distinct answers | fraction identical | exposures | mean |weight std| | max weight range |
@@ -164,6 +216,6 @@ Naming the tickers and dates changes behaviour and results. Same data, same engi
 
 ## Cost / usage
 
-4 agent-period runs in this report, 208 model calls, 706,870 prompt + 36,096 completion tokens (Gemini's count; ~3.4k prompt tokens per call because every price digit tokenises separately). $0 on the free tier; plus 16 uncached consistency calls and ~25 probe/partial calls (17 cached decisions of a `gemini-3.6-flash` 2022-anon run that is resumable at 20 requests/day). Each run took 6-20 minutes wall-clock at the paced ~13 requests/min (latency column includes 429 backoff waits). Re-running any table here costs nothing: the cache is committed.
+5 agent-period runs in this report, 607 model calls, 2,081,328 prompt + 99,651 completion tokens (Gemini's count; ~3.4k prompt tokens per call because every price digit tokenises separately). $0 on the free tier; plus 16 uncached consistency calls and ~25 probe/partial calls (17 cached decisions of a `gemini-3.6-flash` 2022-anon run that is resumable at 20 requests/day). Each run took 6-20 minutes wall-clock at the paced ~13 requests/min (latency column includes 429 backoff waits). Re-running any table here costs nothing: the cache is committed.
 
 **Not done / how to resume.** Full-period 2019-2026 anon run (~397 calls) exceeds one free-tier day: 253 of its decisions (2019-01-02 .. 2023-10-30) are cached, the rest stopped on the daily 500-request cap; re-run `.venv/bin/python scripts/run_llm.py --provider gemini --model gemini-3.5-flash-lite --mode anon --period full --verbose` after the daily quota resets (midnight Pacific = 15:00 HKT) until it exits 0 -- completed decisions come from the cache -- then `.venv/bin/python scripts/report_llm.py` to add the period here. Same command with `--period full --mode real`, or `--model gemini-3.6-flash --period 2022` (20 calls/day), extends the comparison.
