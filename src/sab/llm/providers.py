@@ -40,7 +40,7 @@ import numpy as np
 from sab.llm.cache import DEFAULT_CACHE, LLMCache, cache_key
 
 MOCK_PROVIDERS = ("mock", "mock_ew", "mock_random")
-REAL_PROVIDERS = ("anthropic", "openai", "gemini", "ollama")
+REAL_PROVIDERS = ("anthropic", "openai", "gemini", "ollama", "openai_compat")
 PROVIDERS = MOCK_PROVIDERS + REAL_PROVIDERS
 
 
@@ -320,9 +320,42 @@ def _ollama(model: str, prompt: str, temperature: float, max_tokens: int, seed: 
                        model=body.get("model", model), latency_s=time.perf_counter() - t0, provider="ollama")
 
 
+def _openai_compat(model: str, prompt: str, temperature: float, max_tokens: int, seed: int | None) -> LLMResponse:
+    """Any OpenAI-compatible chat endpoint (ollama `/v1`, LM Studio, `mlx_lm.server`, llama.cpp server, vLLM).
+    Base URL from SAB_OPENAI_COMPAT_BASE_URL (e.g. http://localhost:11434/v1, http://localhost:1234/v1,
+    http://localhost:8080/v1); optional SAB_OPENAI_COMPAT_API_KEY (most local servers ignore it);
+    SAB_OPENAI_COMPAT_TIMEOUT seconds (default 300). Plain `requests`, no SDK. No default URL on purpose:
+    the cross-family check must be pointed at a model deliberately."""
+    import requests   # core dependency
+    _load_env()
+    base = os.environ.get("SAB_OPENAI_COMPAT_BASE_URL", "").rstrip("/")
+    if not base:
+        raise RuntimeError("openai_compat: set SAB_OPENAI_COMPAT_BASE_URL (e.g. http://localhost:11434/v1)")
+    headers = {"Content-Type": "application/json"}
+    if os.environ.get("SAB_OPENAI_COMPAT_API_KEY"):
+        headers["Authorization"] = "Bearer " + os.environ["SAB_OPENAI_COMPAT_API_KEY"]
+    body: dict[str, Any] = {"model": model, "messages": [{"role": "user", "content": prompt}],
+                            "temperature": temperature, "max_tokens": max_tokens, "stream": False}
+    if seed is not None:
+        body["seed"] = int(seed)
+    t0 = time.perf_counter()
+    r = requests.post(f"{base}/chat/completions", headers=headers, json=body,
+                      timeout=float(os.environ.get("SAB_OPENAI_COMPAT_TIMEOUT", "300")))
+    if r.status_code != 200:
+        raise RuntimeError(f"openai_compat {model} @ {base}: HTTP {r.status_code}: {r.text[:300]}")
+    d = r.json()
+    choices = d.get("choices") or []
+    text = ((choices[0].get("message") or {}).get("content") or "") if choices else ""
+    u = d.get("usage") or {}
+    return LLMResponse(text=text, usage={"prompt_tokens": int(u.get("prompt_tokens", 0) or 0),
+                                         "completion_tokens": int(u.get("completion_tokens", 0) or 0),
+                                         "finish_reason": (choices[0].get("finish_reason") or "") if choices else "NO_CHOICE"},
+                       model=d.get("model", model), latency_s=time.perf_counter() - t0, provider="openai_compat")
+
+
 _ADAPTERS: dict[str, Callable[[str, str, float, int, int | None], LLMResponse]] = {
     "mock": _mock, "mock_ew": _mock_ew, "mock_random": _mock_random,
-    "anthropic": _anthropic, "openai": _openai, "gemini": _gemini, "ollama": _ollama,
+    "anthropic": _anthropic, "openai": _openai, "gemini": _gemini, "ollama": _ollama, "openai_compat": _openai_compat,
 }
 
 

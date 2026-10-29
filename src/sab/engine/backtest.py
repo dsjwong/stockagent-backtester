@@ -165,14 +165,15 @@ class BacktestResult:
                    turnover=eq["turnover"], trades=trades, config=cfg, decisions=dec)
 
 
-def rebalance_bars(dates: pd.DatetimeIndex, freq: Rebalance, warmup: int) -> set[int]:
+def rebalance_bars(dates: pd.DatetimeIndex, freq: Rebalance, warmup: int, include_last: bool = False) -> set[int]:
     """Bar indices on which the strategy is asked for orders.
 
     Always includes `warmup` (first decision bar). Then: every bar (daily), the first bar of
     each new ISO week (weekly) or of each new calendar month (monthly). The last bar is
-    excluded everywhere (no next open to fill at).
+    excluded everywhere (no next open to fill at) unless `include_last` (live forward runs, where
+    the newest bar IS the decision bar and its orders simply stay pending).
     """
-    last = len(dates) - 1
+    last = len(dates) - 1 + (1 if include_last else 0)
     if freq == "daily":
         return {t for t in range(warmup, last)}
     key = (lambda d: (d.isocalendar().year, d.isocalendar().week)) if freq == "weekly" else (lambda d: (d.year, d.month))
@@ -188,15 +189,16 @@ def run_backtest(
     market: MarketData,
     config: BacktestConfig = BacktestConfig(),
     name: str | None = None,
+    include_last_bar: bool = False,
 ) -> BacktestResult:
     dates = market.dates
     T = len(dates)
-    if config.warmup < 0 or config.warmup >= T - 1:
+    if config.warmup < 0 or config.warmup >= T - (0 if include_last_bar else 1):
         raise ValueError(f"warmup={config.warmup} leaves no tradeable bars (T={T})")
 
     broker = Broker(config.cost_model)
     state = PortfolioState(cash=config.initial_cash)
-    decision_bars = rebalance_bars(dates, config.rebalance, config.warmup)
+    decision_bars = rebalance_bars(dates, config.rebalance, config.warmup, include_last_bar)
 
     equity = pd.Series(index=dates, dtype=float)
     cash = pd.Series(index=dates, dtype=float)

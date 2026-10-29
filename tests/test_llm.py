@@ -434,3 +434,49 @@ def test_gemini_adapter_gives_up_after_max_retries_and_retries_network_errors(ge
     assert len(calls) == 3                                               # 1 + SAB_GEMINI_MAX_RETRIES
     calls = gemini_env([requests.exceptions.ConnectionError("proxy"), _gemini_ok("recovered")])
     assert complete("gemini", "gemini-test", "Tickers: A\nq", cache=cache).text == "recovered"
+
+
+# ---------------------------------------------------------------------- openai_compat (cross-family local endpoint), mocked
+
+class _FakeResp:
+    def __init__(self, status=200, payload=None, text=""):
+        self.status_code, self._p, self.text = status, payload or {}, text
+
+    def json(self):
+        return self._p
+
+
+def test_openai_compat_request_shape_parse_and_cache(monkeypatch, tmp_path):
+    import requests
+
+    calls = []
+
+    def fake_post(url, headers=None, json=None, timeout=None):
+        calls.append((url, headers, json))
+        return _FakeResp(200, {"model": "qwen-local", "choices": [{"message": {"content": '{"weights": {"A": 0.5}, "rationale": "x"}'},
+                                                                  "finish_reason": "stop"}],
+                               "usage": {"prompt_tokens": 11, "completion_tokens": 7}})
+
+    monkeypatch.setattr(requests, "post", fake_post)
+    monkeypatch.setenv("SAB_OPENAI_COMPAT_BASE_URL", "http://localhost:1234/v1/")
+    monkeypatch.setenv("SAB_OPENAI_COMPAT_API_KEY", "local-key")
+    cache = LLMCache(tmp_path)
+    r = complete("openai_compat", "qwen3-8b", "hello", temperature=0.0, seed=0, cache=cache)
+    assert r.text.startswith('{"weights"') and r.usage["prompt_tokens"] == 11 and r.model == "qwen-local" and not r.cached
+    url, headers, body = calls[0]
+    assert url == "http://localhost:1234/v1/chat/completions" and headers["Authorization"] == "Bearer local-key"
+    assert body["model"] == "qwen3-8b" and body["seed"] == 0 and body["messages"][0]["content"] == "hello"
+    assert complete("openai_compat", "qwen3-8b", "hello", temperature=0.0, seed=0, cache=cache).cached and len(calls) == 1
+
+
+def test_openai_compat_needs_base_url_and_surfaces_http_errors(monkeypatch):
+    import requests
+
+    monkeypatch.delenv("SAB_OPENAI_COMPAT_BASE_URL", raising=False)
+    monkeypatch.setattr("sab.llm.providers._load_env", lambda: None)
+    with pytest.raises(RuntimeError, match="SAB_OPENAI_COMPAT_BASE_URL"):
+        complete("openai_compat", "m", "p", cache=None)
+    monkeypatch.setenv("SAB_OPENAI_COMPAT_BASE_URL", "http://x/v1")
+    monkeypatch.setattr(requests, "post", lambda *a, **k: _FakeResp(500, text="boom"))
+    with pytest.raises(RuntimeError, match="HTTP 500"):
+        complete("openai_compat", "m", "p", cache=None)
