@@ -45,6 +45,46 @@ figures, rationales, repair/fallback counts (0 parse failures in 208 decisions) 
 ![LLM vs benchmarks, 2022](reports/fig/llm_2022.png)
 ![classical strategies, 2019-2026](reports/fig/equity_classical_full.png)
 
+## Forward test (live)
+
+The historical real-vs-anon gap could be leakage (the model remembers 2022) or something else. The clean test is
+forward: after the model's training cutoff there is nothing to remember, so if the gap was leakage it should collapse.
+Every weekday after the US close, [`.github/workflows/forward.yml`](.github/workflows/forward.yml) fetches the latest
+bars, asks the **same pinned model** (`gemini-3.5-flash-lite`, same prompt, weekly cadence, 10+5 bps, next-open fills) for
+a decision in **both** modes (anonymised and real names/dates), appends it to the hash-chained, append-only
+[`forward/decisions.jsonl`](forward/decisions.jsonl) and commits it before the next open, so the git timestamps prove it
+was made in advance. Start: 2026-10-30. Hypothesis, equity curves (anon vs real vs equal weight vs SPY) and the gap with a
+bootstrap CI once n >= 60 days: **[`reports/forward.md`](reports/forward.md)**.
+
+```bash
+.venv/bin/python scripts/forward_run.py --dry-run   # proof of life on the newest closed bar (writes git-ignored forward/dryrun/)
+.venv/bin/python scripts/forward_run.py             # live: fetch, decide, log (the workflow does this; needs GEMINI_API_KEY)
+.venv/bin/python scripts/forward_report.py          # rebuild reports/forward.md, no model calls
+```
+
+The workflow needs the repository secret `GEMINI_API_KEY`; without it the job skips with a warning. Forward prompt-cache
+entries are keyed by (date, mode, model, prompt) and verified on read; re-running a day never duplicates a record.
+
+## Second model checks
+
+* **Within family** (another Gemini model id, same 2022 real-vs-anon setup): result in
+  [`docs/leakage-writeup.md`](docs/leakage-writeup.md#within-family-check).
+* **Cross family** (needs a local model; nothing is installed or downloaded by this repo). Start any OpenAI-compatible
+  server, point the repo at it and run the same command with `--provider openai_compat`:
+
+```bash
+# ollama:     ollama serve &  ollama pull <model>          -> http://localhost:11434/v1
+# LM Studio:  start the local server in the app            -> http://localhost:1234/v1
+# mlx_lm:     mlx_lm.server --model <hf-or-local-path>     -> http://localhost:8080/v1
+export SAB_OPENAI_COMPAT_BASE_URL=http://localhost:11434/v1     # no default on purpose; optional SAB_OPENAI_COMPAT_API_KEY
+for mode in real anon; do
+  .venv/bin/python scripts/run_llm.py --provider openai_compat --model <served-model-name> --mode $mode --period 2022 --verbose
+done
+.venv/bin/python scripts/report_llm.py
+```
+
+Responses are cached like every other provider, so an interrupted run resumes for free.
+
 ## Methodology
 
 - **Data**: 15 US large-caps (AAPL MSFT NVDA AMZN GOOGL JPM BAC XOM CVX JNJ PFE UNH PG KO WMT) + SPY, daily adjusted
@@ -86,7 +126,7 @@ figures, rationales, repair/fallback counts (0 parse failures in 208 decisions) 
 
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -e '.[dev]'                 # Python 3.12+, all deps offline-capable
-.venv/bin/pytest -q                                                        # 107 tests: fills, lookahead, prompt audit, cache, parser, adapter
+.venv/bin/pytest -q                                                        # 122 tests: fills, lookahead, prompt audit, cache, parser, adapter
 .venv/bin/python scripts/run_classical.py                                  # M3 tables + figures from the committed snapshot (~1 min)
 .venv/bin/python scripts/run_llm.py --provider gemini --model gemini-3.5-flash-lite --mode anon --period 2022   # 0 API calls: served from the committed cache
 .venv/bin/python scripts/report_llm.py                                     # rebuilds reports/M4-llm-results.md + reports/fig/llm_*.png
@@ -111,7 +151,7 @@ scripts/             run_benchmark.py (M2), run_classical.py (M3), run_llm.py (M
 reports/             M2-benchmark.md, M3-results.md, M4-llm-results.md, fig/, runs/<period>/<cost>/<strategy>/ (equity/weights/trades/decisions parquet + config)
 data/                snapshots (committed), llm_cache/ (committed prompt -> response)
 docs/                leakage-writeup.md (the 2-minute story), linkedin-draft.md, decisions.md (#1-#29), stockagent-reuse-assessment.md
-tests/               107 offline tests
+tests/               offline tests
 ```
 
 **Minimal strategy API:**

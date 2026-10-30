@@ -91,6 +91,27 @@ The anonymised agent is a high-turnover momentum chaser. It does **not** beat eq
 pays **$605k of costs on $1M** at 9.4x turnover -- 3.5 percentage points a year of CAGR handed to the broker. Its
 one good year (2022) is the energy trade that every momentum rule in this repo found.
 
+## Within-family check
+
+*Within-family only (another Gemini release, same tier) -- not a cross-family check.* The 2022 real-vs-anonymised
+comparison rerun with `gemini-3.1-flash-lite`, everything else identical (prompt, weekly cadence, T=0, seed 0, 10+5 bps,
+52 decisions per mode). Table and word counts: [`reports/within-family.md`](../reports/within-family.md).
+
+| 2022, after costs | real | anon | gap (real - anon) | weight-path corr. |
+|---|---|---|---|---|
+| gemini-3.5-flash-lite (original) | +11.9% | +1.6% | **+10.3 pp** | 0.65 |
+| gemini-3.1-flash-lite (rerun) | +8.2% | -0.8% | **+9.0 pp** | 0.80 |
+| EW-15 rebalanced | -9.6% | | | |
+
+**The gap replicates in sign and size** (+9.0 vs +10.3 pp; real beats anon on Sharpe too, 0.49 vs 0.10), and the
+sector vocabulary the prompt never supplied shows up only in real mode again (energy/oil 48 vs 0 decisions, tech 28 vs 0,
+defensive 48 vs 1, a real ticker symbol 31 vs 0). It is not a perfect copy: this model trades more in both arms (turnover
+9.9x real / 13.1x anon), the anonymised arm has a worse drawdown (-28.7%), and the two weight paths correlate more (0.80
+vs 0.65). Caveats: one seed, one year, 52 decisions per arm; no repeated-draw consistency check was run on this model
+(the 8-draw evidence above is for the original model only); and the second model is a sibling, so shared training data
+is the likely common cause -- which is what a leakage story predicts, but also means this is not independent evidence.
+The forward test (`reports/forward.md`) and the cross-family run (README, `openai_compat`) are the checks still open.
+
 ## Why this matters
 
 - **Any LLM-trading backtest on real symbols and dates is contaminated.** The model has read the period. A
@@ -107,7 +128,7 @@ side, every table also reported at zero cost; long-only, integer shares. Lookahe
 formats every post-decision price/date the way the prompt does and asserts none appears, and perturbation tests
 that scale all prices after T\* by 1.5 and assert nothing decided before T\* changes. Every (model, prompt,
 temperature, seed) -> response is cached on disk and committed, so replaying any number here costs **$0** and
-needs no key. 107 offline tests. Model: `gemini-3.5-flash-lite`, Gemini free tier, T=0, seed 0.
+needs no key. 122 offline tests. Model: `gemini-3.5-flash-lite`, Gemini free tier, T=0, seed 0.
 Full tables and rationales: [`reports/M4-llm-results.md`](../reports/M4-llm-results.md) (LLM),
 [`reports/M3-results.md`](../reports/M3-results.md) (classical baselines),
 [`docs/decisions.md`](decisions.md) (#22-#29, the design decisions behind all of it). Figures regenerate with

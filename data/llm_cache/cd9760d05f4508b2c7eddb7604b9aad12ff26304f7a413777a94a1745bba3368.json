@@ -1,0 +1,28 @@
+{
+ "provider": "gemini",
+ "model": "gemini-3.1-flash-lite",
+ "temperature": 0.0,
+ "seed": 0,
+ "prompt": "You are a portfolio manager deciding target weights for a long-only stock portfolio.\nRules: weights are fractions of total equity, each in [0, 1], the sum must be <= 1; whatever is not allocated stays in cash. No shorting, no leverage. Orders fill at the next open and cost about 0.15% per side, so do not churn without reason. Decide from the data below only.\nToday: 2022-06-21\nTickers: AAPL, MSFT, NVDA, AMZN, GOOGL, JPM, BAC, XOM, CVX, JNJ, PFE, UNH, PG, KO, WMT\n\nRecent closes (last 10 bars daily, then every 5 bars, oldest first). Adjusted closes.\ndate | AAPL | MSFT | NVDA | AMZN | GOOGL | JPM | BAC | XOM | CVX | JNJ | PFE | UNH | PG | KO | WMT\n2022-03-25 | 170.88 | 293.14 | 27.61 | 164.77 | 140.43 | 126.74 | 39.27 | 73.74 | 142.87 | 156.63 | 41.18 | 474.53 | 135.97 | 54.30 | 45.38\n2022-04-01 | 170.48 | 298.68 | 26.63 | 163.56 | 138.92 | 120.84 | 36.73 | 71.94 | 138.57 | 157.76 | 40.23 | 474.12 | 137.98 | 55.48 | 47.77\n2022-04-08 | 166.35 | 286.66 | 23.05 | 154.46 | 132.12 | 120.10 | 35.62 | 75.16 | 143.39 | 161.24 | 43.04 | 504.98 | 142.44 | 56.33 | 49.80\n2022-04-18 | 161.44 | 270.78 | 21.72 | 152.79 | 126.55 | 115.57 | 34.89 | 76.64 | 146.73 | 157.29 | 40.44 | 494.00 | 139.73 | 56.87 | 49.31\n2022-04-25 | 159.30 | 270.97 | 19.84 | 146.07 | 121.99 | 114.05 | 33.48 | 71.20 | 132.89 | 164.68 | 38.19 | 484.92 | 145.43 | 58.19 | 49.65\n2022-05-02 | 154.49 | 274.59 | 19.47 | 124.50 | 115.56 | 108.36 | 32.45 | 74.79 | 134.80 | 158.16 | 37.71 | 463.54 | 141.70 | 55.98 | 48.08\n2022-05-09 | 148.94 | 255.40 | 16.90 | 108.79 | 111.52 | 109.63 | 32.66 | 73.10 | 134.38 | 157.00 | 37.95 | 449.91 | 139.22 | 57.02 | 48.04\n2022-05-16 | 142.55 | 252.42 | 17.21 | 110.81 | 113.44 | 106.39 | 31.26 | 79.52 | 145.99 | 157.66 | 39.85 | 452.50 | 138.78 | 58.21 | 47.06\n2022-05-23 | 140.17 | 252.19 | 16.85 | 107.56 | 110.51 | 112.10 | 32.21 | 82.09 | 146.09 | 159.89 | 41.59 | 455.15 | 129.77 | 55.47 | 38.93\n2022-05-31 | 145.79 | 263.04 | 18.62 | 120.21 | 112.76 | 118.96 | 33.40 | 83.94 | 148.59 | 159.97 | 41.72 | 459.50 | 132.30 | 55.93 | 40.84\n2022-06-07 | 145.66 | 263.65 | 18.87 | 123.00 | 116.12 | 117.02 | 32.83 | 90.38 | 153.31 | 158.91 | 42.44 | 459.79 | 131.46 | 55.82 | 39.17\n2022-06-08 | 144.92 | 261.63 | 18.60 | 121.18 | 116.16 | 115.16 | 32.41 | 91.45 | 154.10 | 157.96 | 42.05 | 456.49 | 129.83 | 55.50 | 38.83\n2022-06-09 | 139.71 | 256.19 | 18.00 | 116.15 | 113.83 | 112.74 | 31.17 | 89.47 | 151.03 | 154.78 | 40.73 | 452.70 | 127.48 | 54.54 | 38.42\n2022-06-10 | 134.32 | 244.78 | 16.93 | 109.65 | 110.18 | 107.55 | 29.96 | 87.84 | 149.22 | 153.75 | 39.30 | 448.26 | 127.00 | 54.19 | 38.64\n2022-06-13 | 129.17 | 234.39 | 15.60 | 103.67 | 105.46 | 104.35 | 28.92 | 83.81 | 142.36 | 152.20 | 37.68 | 434.45 | 123.60 | 54.13 | 37.91\n2022-06-14 | 130.04 | 236.55 | 15.79 | 102.31 | 105.78 | 102.62 | 28.41 | 84.03 | 142.54 | 149.86 | 37.69 | 427.10 | 119.74 | 52.65 | 37.93\n2022-06-15 | 132.65 | 243.59 | 16.48 | 107.67 | 108.80 | 103.83 | 28.94 | 82.97 | 139.74 | 151.47 | 38.15 | 429.48 | 118.55 | 53.04 | 37.90\n2022-06-16 | 127.39 | 237.02 | 15.56 | 103.66 | 105.10 | 102.05 | 28.76 | 79.91 | 132.27 | 151.55 | 37.34 | 423.36 | 119.28 | 52.50 | 38.30\n2022-06-17 | 128.86 | 239.61 | 15.84 | 106.22 | 106.20 | 101.69 | 28.83 | 75.30 | 126.23 | 150.99 | 36.60 | 419.62 | 118.42 | 52.82 | 37.56\n2022-06-21 | 133.08 | 245.50 | 16.52 | 108.68 | 110.56 | 104.21 | 29.67 | 79.99 | 131.52 | 154.16 | 37.84 | 445.86 | 122.01 | 53.95 | 38.79\n\nTrailing returns:\nticker | 1w | 1m | 3m | 6m\nAAPL | +3.0% | -1.1% | -17.7% | -20.4%\nMSFT | +4.7% | +0.2% | -15.0% | -21.3%\nNVDA | +5.9% | -3.2% | -38.0% | -40.4%\nAMZN | +4.8% | +1.3% | -32.7% | -36.1%\nGOOGL | +4.8% | +1.1% | -18.0% | -21.3%\nJPM | -0.1% | -2.1% | -16.4% | -25.1%\nBAC | +2.6% | -4.1% | -22.9% | -24.3%\nXOM | -4.6% | +0.4% | +12.4% | +55.7%\nCVX | -7.6% | -7.4% | -5.3% | +38.6%\nJNJ | +1.3% | +0.1% | -1.0% | +4.2%\nPFE | +0.4% | -5.0% | -10.5% | -17.8%\nUNH | +2.6% | +0.7% | -5.0% | -0.8%\nPG | -1.3% | -3.8% | -9.0% | -12.4%\nKO | -0.3% | +1.9% | +0.9% | +6.7%\nWMT | +2.3% | +2.6% | -15.0% | -11.3%\n\nPortfolio:\nCurrent weights: XOM 24.1%, CVX 23.4%, JNJ 20.8%, UNH 5.3%, KO 20.5%\nCash: 6.0% of equity\nEquity vs start: +1.7%\n\nRespond with ONLY a JSON object, no prose before or after, exactly of the form\n{\"weights\": {\"<ticker>\": <fraction>, ...}, \"rationale\": \"<= 40 words\"}\nusing only these tickers (AAPL, MSFT, NVDA, AMZN, GOOGL, JPM, BAC, XOM, CVX, JNJ, PFE, UNH, PG, KO, WMT). Omitted tickers get weight 0. Example shape: {\"weights\": {\"AAPL\": 0.0, \"MSFT\": 0.0}, \"rationale\": \"...\"}",
+ "response": {
+  "text": "{\"weights\": {\"XOM\": 0.15, \"CVX\": 0.15, \"JNJ\": 0.25, \"UNH\": 0.25, \"KO\": 0.2}, \"rationale\": \"Maintaining defensive posture in energy and healthcare. Reducing energy exposure due to recent momentum reversal while increasing allocation to stable, low-beta healthcare and consumer staples to mitigate ongoing market volatility.\"}",
+  "usage": {
+   "prompt_tokens": 3358,
+   "completion_tokens": 92,
+   "thought_tokens": 0,
+   "finish_reason": "STOP"
+  },
+  "model": "gemini-3.1-flash-lite",
+  "latency_s": 9.559534415995586,
+  "provider": "gemini",
+  "cached": false
+ },
+ "usage": {
+  "prompt_tokens": 3358,
+  "completion_tokens": 92,
+  "thought_tokens": 0,
+  "finish_reason": "STOP"
+ },
+ "key": "cd9760d05f4508b2c7eddb7604b9aad12ff26304f7a413777a94a1745bba3368",
+ "timestamp": "2026-10-29T23:09:00+0800"
+}
