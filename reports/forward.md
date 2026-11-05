@@ -20,5 +20,5 @@ The model's training cutoff is the vendor's to state; this repo does not assume 
 
 Start: **2026-10-30**; model `gemini-3.5-flash-lite` (provider gemini), cadence weekly, T=0.0, seed 0, costs 10+5 bps/side, rf=0. Hash chain verified over 0 records.
 
-**No forward data yet.** Newest stored bar: 2026-10-28; decisions logged: 0. This page fills in as the daily workflow runs.
+**No forward data yet.** Newest stored bar: 2026-11-04; decisions logged: 0. This page fills in as the daily workflow runs.
 
