@@ -18,7 +18,7 @@ Nothing is tuned: model id, prompt format, weekly cadence, seed and costs are pi
 before the next US open; `git log --format='%H %cI' -- forward/decisions.jsonl` gives the commit timestamps.
 The model's training cutoff is the vendor's to state; this repo does not assume one.
 
-Start: **2026-10-30**; model `gemini-3.5-flash-lite` (provider gemini), cadence weekly, T=0.0, seed 0, costs 10+5 bps/side, rf=0. Hash chain verified over 0 records.
+Start: **2026-11-05**; model `gemini-3.5-flash-lite` (provider gemini), cadence weekly, T=0.0, seed 0, costs 10+5 bps/side, rf=0. Hash chain verified over 0 records.
 
 **No forward data yet.** Newest stored bar: 2026-11-04; decisions logged: 0. This page fills in as the daily workflow runs.
 

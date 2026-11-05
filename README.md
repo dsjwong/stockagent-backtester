@@ -53,7 +53,7 @@ Every weekday after the US close, [`.github/workflows/forward.yml`](.github/work
 bars, asks the **same pinned model** (`gemini-3.5-flash-lite`, same prompt, weekly cadence, 10+5 bps, next-open fills) for
 a decision in **both** modes (anonymised and real names/dates), appends it to the hash-chained, append-only
 [`forward/decisions.jsonl`](forward/decisions.jsonl) and commits it before the next open, so the git timestamps prove it
-was made in advance. Start: 2026-10-30. Hypothesis, equity curves (anon vs real vs equal weight vs SPY) and the gap with a
+was made in advance. Start: 2026-11-05 (planned 2026-10-30; moved because the API-key secret was not in place until 2026-11-05, and the runner never back-fills a missed decision). Hypothesis, equity curves (anon vs real vs equal weight vs SPY) and the gap with a
 bootstrap CI once n >= 60 days: **[`reports/forward.md`](reports/forward.md)**.
 
 ```bash

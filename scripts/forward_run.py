@@ -5,7 +5,7 @@
     .venv/bin/python scripts/forward_run.py --no-fetch      # decide from already-stored bars
 
 The pinned model/prompt/cadence live in forward/config.json (created on first live run with --start,
-default 2026-10-30). The first decision is the first bar >= start (entered from cash); then the first bar of
+default 2026-11-05). The first decision is the first bar >= start (entered from cash); then the first bar of
 each ISO week, like the historical weekly agent. A decision is refused after the next US open (it would no
 longer be "in advance"). Re-running a day replays the log: no model call, no duplicate record.
 
@@ -28,7 +28,7 @@ from sab.forward import (FORWARD_DIR, ForwardConfig, ForwardDataError, StaleDeci
                          latest_complete_bar_date, load_forward_market, run_forward)
 from sab.llm.providers import QuotaExhausted  # noqa: E402
 
-DEFAULT_START = "2026-10-30"      # next trading day after 2026-10-29, when the forward test was set up
+DEFAULT_START = "2026-11-05"      # first bar after the GEMINI_API_KEY secret landed (set up 2026-10-29; 10-30 and 11-02 decisions were missed)
 
 
 def main(argv=None) -> int:
