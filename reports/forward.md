@@ -18,7 +18,31 @@ Nothing is tuned: model id, prompt format, weekly cadence, seed and costs are pi
 before the next US open; `git log --format='%H %cI' -- forward/decisions.jsonl` gives the commit timestamps.
 The model's training cutoff is the vendor's to state; this repo does not assume one.
 
-Start: **2026-11-05**; model `gemini-3.5-flash-lite` (provider gemini), cadence weekly, T=0.0, seed 0, costs 10+5 bps/side, rf=0. Hash chain verified over 0 records.
+Start: **2026-11-05**; model `gemini-3.5-flash-lite` (provider gemini), cadence weekly, T=0.0, seed 0, costs 10+5 bps/side, rf=0. Hash chain verified over 2 records.
 
-**No forward data yet.** Newest stored bar: 2026-11-04; decisions logged: 0. This page fills in as the daily workflow runs.
+Bars: 2026-11-05 .. 2026-11-05 (1); decisions: 1 anon / 1 real; model id actually served: gemini-3.5-flash-lite.
+
+## Equity since start
+
+| strategy (rf=0) | CAGR | TotalRet | Vol | Sharpe | Sortino | MaxDD | DD_days | Calmar | Turnover | Exposure | WinRate | Trades | Costs | Costs_bps |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| LLM anon |  | 0.0% |  |  |  | 0.0% | 0 |  | 0.00 | 0.0% |  | 0 | 0 | 0 |
+| LLM real |  | 0.0% |  |  |  | 0.0% | 0 |  | 0.00 | 0.0% |  | 0 | 0 | 0 |
+| EW-15 (monthly rebal) |  | 0.0% |  |  |  | 0.0% | 0 |  | 0.00 | 0.0% |  | 0 | 0 | 0 |
+| SPY |  | 0.0% |  |  |  | 0.0% | 0 |  | 0.00 | 0.0% |  | 0 | 0 | 0 |
+
+![forward equity](fig/forward.png)
+
+## Anon vs real gap
+
+Mean daily return difference (real - anon), annualised: **+nan%** over 0 days.
+95% CI withheld until n >= 60 trading days (n = 0); any reading now is noise.
+
+For scale, the historical 2022 gap was +10.3 pp over one year (real +11.9% vs anon +1.6%), same models/prompt.
+
+## Decisions (exposure, number of names held)
+
+| date | anon exp | anon names | real exp | real names | decided at (UTC) |
+|---|---|---|---|---|---|
+| 2026-11-05 | 1.00 | 5 | 0.90 | 6 | 2026-11-06T02:38:24+00:00 |
 
