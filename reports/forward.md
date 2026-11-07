@@ -20,23 +20,23 @@ The model's training cutoff is the vendor's to state; this repo does not assume 
 
 Start: **2026-11-05**; model `gemini-3.5-flash-lite` (provider gemini), cadence weekly, T=0.0, seed 0, costs 10+5 bps/side, rf=0. Hash chain verified over 2 records.
 
-Bars: 2026-11-05 .. 2026-11-05 (1); decisions: 1 anon / 1 real; model id actually served: gemini-3.5-flash-lite.
+Bars: 2026-11-05 .. 2026-11-06 (2); decisions: 1 anon / 1 real; model id actually served: gemini-3.5-flash-lite.
 
 ## Equity since start
 
 | strategy (rf=0) | CAGR | TotalRet | Vol | Sharpe | Sortino | MaxDD | DD_days | Calmar | Turnover | Exposure | WinRate | Trades | Costs | Costs_bps |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| LLM anon |  | 0.0% |  |  |  | 0.0% | 0 |  | 0.00 | 0.0% |  | 0 | 0 | 0 |
-| LLM real |  | 0.0% |  |  |  | 0.0% | 0 |  | 0.00 | 0.0% |  | 0 | 0 | 0 |
-| EW-15 (monthly rebal) |  | 0.0% |  |  |  | 0.0% | 0 |  | 0.00 | 0.0% |  | 0 | 0 | 0 |
-| SPY |  | 0.0% |  |  |  | 0.0% | 0 |  | 0.00 | 0.0% |  | 0 | 0 | 0 |
+| LLM anon | 3477.9% | 1.4% |  |  |  | 0.0% | 0 |  | 62.91 | 50.0% |  | 5 | 1,498 | 15 |
+| LLM real | 1875.9% | 1.2% |  |  |  | 0.0% | 0 |  | 56.57 | 45.0% |  | 6 | 1,347 | 13 |
+| EW-15 (monthly rebal) | 466.8% | 0.7% |  |  |  | 0.0% | 0 |  | 62.81 | 49.9% |  | 15 | 1,495 | 15 |
+| SPY | -19.5% | -0.1% |  |  |  | -0.1% | 1 | -226.68 | 62.90 | 50.0% |  | 1 | 1,497 | 15 |
 
 ![forward equity](fig/forward.png)
 
 ## Anon vs real gap
 
-Mean daily return difference (real - anon), annualised: **+nan%** over 0 days.
-95% CI withheld until n >= 60 trading days (n = 0); any reading now is noise.
+Mean daily return difference (real - anon), annualised: **-60.2%** over 1 days.
+95% CI withheld until n >= 60 trading days (n = 1); any reading now is noise.
 
 For scale, the historical 2022 gap was +10.3 pp over one year (real +11.9% vs anon +1.6%), same models/prompt.
 
