@@ -20,23 +20,23 @@ The model's training cutoff is the vendor's to state; this repo does not assume 
 
 Start: **2026-11-05**; model `gemini-3.5-flash-lite` (provider gemini), cadence weekly, T=0.0, seed 0, costs 10+5 bps/side, rf=0. Hash chain verified over 4 records.
 
-Bars: 2026-11-05 .. 2026-11-09 (3); decisions: 2 anon / 2 real; model id actually served: gemini-3.5-flash-lite.
+Bars: 2026-11-05 .. 2026-11-10 (4); decisions: 2 anon / 2 real; model id actually served: gemini-3.5-flash-lite.
 
 ## Equity since start
 
 | strategy (rf=0) | CAGR | TotalRet | Vol | Sharpe | Sortino | MaxDD | DD_days | Calmar | Turnover | Exposure | WinRate | Trades | Costs | Costs_bps |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| LLM anon | 1588.2% | 2.3% | 6.8% | 42.02 |  | 0.0% | 0 |  | 41.94 | 66.6% |  | 5 | 1,498 | 15 |
-| LLM real | 2043.8% | 2.5% | 0.7% | 419.30 |  | 0.0% | 0 |  | 37.72 | 60.0% |  | 6 | 1,347 | 13 |
-| EW-15 (monthly rebal) | 598.4% | 1.6% | 1.9% | 104.07 |  | 0.0% | 0 |  | 41.88 | 66.5% |  | 15 | 1,495 | 15 |
-| SPY | 1606.2% | 2.3% | 27.5% | 10.44 | 297.78 | -0.1% | 1 | 18696.26 | 41.93 | 66.6% |  | 1 | 1,497 | 15 |
+| LLM anon | 660.7% | 2.4% | 10.0% | 20.45 |  | 0.0% | 0 |  | 31.92 | 74.9% | 100.0% | 10 | 1,520 | 15 |
+| LLM real | 719.4% | 2.5% | 10.6% | 20.01 |  | 0.0% | 0 |  | 28.58 | 67.4% | 100.0% | 11 | 1,361 | 14 |
+| EW-15 (monthly rebal) | 200.7% | 1.3% | 9.3% | 11.88 | 52.12 | -0.2% | 1 | 866.69 | 31.41 | 74.9% |  | 15 | 1,495 | 15 |
+| SPY | 386.3% | 1.9% | 23.9% | 6.73 | 46.38 | -0.4% | 1 | 1050.41 | 31.45 | 75.0% |  | 1 | 1,497 | 15 |
 
 ![forward equity](fig/forward.png)
 
 ## Anon vs real gap
 
-Mean daily return difference (real - anon), annualised: **+24.1%** over 2 days.
-95% CI withheld until n >= 60 trading days (n = 2); any reading now is noise.
+Mean daily return difference (real - anon), annualised: **+7.5%** over 3 days.
+95% CI withheld until n >= 60 trading days (n = 3); any reading now is noise.
 
 For scale, the historical 2022 gap was +10.3 pp over one year (real +11.9% vs anon +1.6%), same models/prompt.
 
