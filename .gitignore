@@ -7,3 +7,4 @@ data/cache/
 .DS_Store
 *.egg-info/
 forward/dryrun/
+requirements-frozen.txt

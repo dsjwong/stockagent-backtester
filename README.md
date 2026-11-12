@@ -1,5 +1,11 @@
 # StockAgent Backtester
 
+**TL;DR:** a StockAgent-style LLM trader replayed on 15 real US large-caps (2019-2026), next-open fills, costs in.
+Anonymised, the LLM does not beat equal weight after costs (20.4% CAGR / 1.04 Sharpe vs EW-15's 22.7% / 1.23 over
+2019-26). Given real ticker names and dates it behaves differently -- 2022: 12.0% vs 1.6% CAGR, and the same prompt
+drawn 8 times gives 100% cash with real names vs the same 4 stocks anonymised -- i.e. the apparent edge is memory of
+2022, not skill. A daily forward test (both modes, committed before the open) is the running check.
+
 > **Read the 2-minute story: [`docs/leakage-writeup.md`](docs/leakage-writeup.md)** — what happens when you give an
 > LLM real ticker names and dates, and why the anonymised (negative) result is the one to trust.
 
@@ -64,6 +70,47 @@ bootstrap CI once n >= 60 days: **[`reports/forward.md`](reports/forward.md)**.
 
 The workflow needs the repository secret `GEMINI_API_KEY`; without it the job skips with a warning. Forward prompt-cache
 entries are keyed by (date, mode, model, prompt) and verified on read; re-running a day never duplicates a record.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    subgraph data["sab/data"]
+        download["download.py<br/>(yfinance/stooq)"] --> snapshots[("data/snapshots/<br/>committed parquet")]
+        snapshots --> loader["loader.py<br/>(offline-only)"]
+    end
+    loader --> market["engine/market.py<br/>MarketData, Context<br/>(point-in-time view)"]
+
+    subgraph llm["sab/llm"]
+        prompt["prompt.py<br/>builder + no-future audit"] --> cache[("cache.py<br/>data/llm_cache/ (committed)")]
+        cache --> providers["providers.py<br/>gemini / anthropic / openai<br/>ollama / openai_compat / mocks"]
+        providers --> parse["parse.py<br/>tolerant JSON, repairs counted"]
+    end
+
+    subgraph strategies["sab/strategies"]
+        classical["EqualWeight, MeanReversion,<br/>TrendFollowing, WeightedTrend,<br/>MomentumTopK, SpyReference"]
+        agent["llm/strategy.py<br/>LLMAgent"]
+    end
+    parse --> agent
+
+    subgraph engine["sab/engine"]
+        backtest["backtest.py<br/>run_backtest (daily loop)"] --> broker["broker.py<br/>fills at open[t+1], integer shares"]
+        costs["costs.py<br/>10 bps + 5 bps per side"] --> broker
+    end
+    market --> backtest
+    classical --> backtest
+    agent --> backtest
+    broker --> metrics["sab/metrics<br/>CAGR, Sharpe, MaxDD,<br/>turnover, ..."]
+    metrics --> reports["reports/<br/>M2 / M3 / M4 + fig/"]
+
+    subgraph fwd["forward test (live)"]
+        gha[".github/workflows/forward.yml<br/>weekday cron, after US close"] --> fwd_run["scripts/forward_run.py<br/>decide anon + real"]
+        fwd_run --> fwd_log[("forward/decisions.jsonl<br/>hash-chained, append-only")]
+        fwd_log --> fwd_report["scripts/forward_report.py<br/>reports/forward.md"]
+    end
+    market -.-> fwd_run
+    providers -.-> fwd_run
+```
 
 ## Second model checks
 
@@ -147,7 +194,8 @@ src/sab/engine/      MarketData, Context (point-in-time view), broker (next-open
 src/sab/metrics/     CAGR/Sharpe/Sortino/MaxDD/turnover/... + summary_table
 src/sab/strategies/  EqualWeight, SpyReference, MeanReversion, TrendFollowing, WeightedTrend, MomentumTopK
 src/sab/llm/         prompt builder + no-future audit, disk cache, providers (gemini REST, anthropic, openai, ollama, 3 mocks), parser, LLMAgent, consistency_check
-scripts/             run_benchmark.py (M2), run_classical.py (M3), run_llm.py (M4), report_llm.py (M5), fig_leakage.py (writeup figures)
+src/sab/forward/     daily forward test: runner, data, cache, hash-chained log, analysis
+scripts/             run_benchmark.py (M2), run_classical.py (M3), run_llm.py (M4), report_llm.py (M5), fig_leakage.py (writeup figures), within_family.py, forward_run.py + forward_report.py (live forward test)
 reports/             M2-benchmark.md, M3-results.md, M4-llm-results.md, fig/, runs/<period>/<cost>/<strategy>/ (equity/weights/trades/decisions parquet + config)
 data/                snapshots (committed), llm_cache/ (committed prompt -> response)
 docs/                leakage-writeup.md (the 2-minute story), linkedin-draft.md, decisions.md (#1-#29), stockagent-reuse-assessment.md
