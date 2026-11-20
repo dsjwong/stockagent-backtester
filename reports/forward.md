@@ -20,23 +20,23 @@ The model's training cutoff is the vendor's to state; this repo does not assume 
 
 Start: **2026-11-05**; model `gemini-3.5-flash-lite` (provider gemini), cadence weekly, T=0.0, seed 0, costs 10+5 bps/side, rf=0. Hash chain verified over 6 records.
 
-Bars: 2026-11-05 .. 2026-11-18 (10); decisions: 3 anon / 3 real; model id actually served: gemini-3.5-flash-lite.
+Bars: 2026-11-05 .. 2026-11-19 (11); decisions: 3 anon / 3 real; model id actually served: gemini-3.5-flash-lite.
 
 ## Equity since start
 
 | strategy (rf=0) | CAGR | TotalRet | Vol | Sharpe | Sortino | MaxDD | DD_days | Calmar | Turnover | Exposure | WinRate | Trades | Costs | Costs_bps |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| LLM anon | 99.5% | 2.5% | 11.8% | 5.91 | 12.97 | -1.3% | 2 | 74.94 | 12.84 | 89.8% | 100.0% | 14 | 1,530 | 15 |
-| LLM real | 20.5% | 0.7% | 15.5% | 1.28 | 1.91 | -2.7% | 3 | 7.59 | 18.28 | 81.9% | 77.8% | 21 | 2,204 | 22 |
-| EW-15 (monthly rebal) | -40.7% | -1.9% | 14.8% | -3.45 | -4.04 | -4.0% | 3 | -10.07 | 12.56 | 89.8% |  | 15 | 1,495 | 15 |
-| SPY | -19.6% | -0.8% | 19.8% | -1.02 | -1.67 | -3.9% | 5 | -5.04 | 12.58 | 89.9% |  | 1 | 1,497 | 15 |
+| LLM anon | 28.8% | 1.0% | 14.1% | 1.85 | 2.94 | -2.8% | 3 | 10.41 | 11.68 | 90.7% | 100.0% | 14 | 1,530 | 15 |
+| LLM real | -25.7% | -1.2% | 17.5% | -1.62 | -2.10 | -4.5% | 4 | -5.72 | 16.62 | 83.1% | 77.8% | 21 | 2,204 | 22 |
+| EW-15 (monthly rebal) | -62.1% | -3.8% | 16.6% | -5.78 | -6.14 | -5.9% | 4 | -10.48 | 11.42 | 90.7% |  | 15 | 1,495 | 15 |
+| SPY | -50.1% | -2.7% | 20.9% | -3.23 | -4.48 | -5.8% | 6 | -8.67 | 11.44 | 90.9% |  | 1 | 1,497 | 15 |
 
 ![forward equity](fig/forward.png)
 
 ## Anon vs real gap
 
-Mean daily return difference (real - anon), annualised: **-50.0%** over 9 days.
-95% CI withheld until n >= 60 trading days (n = 9); any reading now is noise.
+Mean daily return difference (real - anon), annualised: **-54.4%** over 10 days.
+95% CI withheld until n >= 60 trading days (n = 10); any reading now is noise.
 
 For scale, the historical 2022 gap was +10.3 pp over one year (real +11.9% vs anon +1.6%), same models/prompt.
 
